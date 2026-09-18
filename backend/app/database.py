@@ -4,7 +4,15 @@ from sqlalchemy.ext.declarative import declarative_base
 from app.config import settings
 import pgvector.sqlalchemy
 
+from sqlalchemy import create_engine, event
+
 engine = create_engine(settings.DATABASE_URL)
+
+@event.listens_for(engine, "connect")
+def connect(dbapi_connection, connection_record):
+    cursor = dbapi_connection.cursor()
+    cursor.execute("SET search_path TO public, extensions")
+    cursor.close()
 SessionLocal = sessionmaker(autocommit=False, autoflush=False, bind=engine)
 
 Base = declarative_base()
