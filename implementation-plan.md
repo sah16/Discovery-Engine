@@ -7,11 +7,10 @@ This document outlines the phase-wise implementation plan for the **AI-Powered D
 *   **Tasks:**
     *   Initialize the backend repository (Python/FastAPI) and frontend repository (React/Next.js or Vite).
     *   Set up the databases: 
-        *   Relational DB (PostgreSQL) for structured metadata and raw text.
-        *   Vector DB (e.g., Qdrant, Weaviate, or pgvector) for semantic embeddings.
+        *   Unified DB (Supabase/PostgreSQL) with `pgvector` for both structured metadata and semantic embeddings.
     *   Integrate API keys and setup clients for:
-        *   **LLM Provider**: Groq (`llama-3.3-70b-versatile`).
-        *   **Embeddings**: `BAAI/bge-large-en-v1.5` (via local hosting with Hugging Face/SentenceTransformers or a dedicated endpoint).
+        *   **LLM Provider**: Groq (`openai/gpt-oss-120b - on_demand`).
+        *   **Embeddings**: `all-MiniLM-L6-v2` (SentenceTransformers, 384 dimensions).
     *   Define core data models and database schemas (e.g., `FeedbackRecord`, `ProcessedInsight`).
 
 ## Phase 2: Data Ingestion Pipeline (Weeks 2-3)
@@ -25,11 +24,11 @@ This document outlines the phase-wise implementation plan for the **AI-Powered D
 ## Phase 3: Data Processing & Vectorization (Weeks 3-4)
 **Goal:** Extract structured features from raw text and generate semantic embeddings for search.
 *   **Tasks:**
-    *   Implement an LLM extraction pipeline using Groq (`llama-3.3-70b-versatile`) to parse raw text and identify:
+    *   Implement an LLM extraction pipeline using Groq (`openai/gpt-oss-120b - on_demand`) to parse raw text and identify:
         *   Target of search (e.g., receipt, vacation).
         *   Search strategy used.
         *   User emotion/frustration.
-    *   Generate embeddings for the text chunks using `BAAI/bge-large-en-v1.5`.
+    *   Generate embeddings for the text chunks using `all-MiniLM-L6-v2`.
     *   Upsert the generated embeddings into the Vector Database alongside the extracted structured metadata (stored in Postgres).
 
 ## Phase 4: Intent Inference & Backend RAG Engine (Weeks 5-6)
@@ -38,7 +37,7 @@ This document outlines the phase-wise implementation plan for the **AI-Powered D
     *   Build the `POST /api/query` endpoint in FastAPI.
     *   Implement the Intent Inference module using Groq to classify incoming natural language queries (e.g., Cognitive Memory, Search Breakdown).
     *   Develop the Retrieval-Augmented Generation (RAG) logic:
-        *   Translate the inferred intent into a Vector DB query (embedding the user query with `bge-large-en-v1.5`).
+        *   Translate the inferred intent into a Vector DB query (embedding the user query with `all-MiniLM-L6-v2`).
         *   Perform a hybrid search (semantic similarity + metadata filtering) to fetch relevant feedback threads.
 
 ## Phase 5: Synthesis & Quantification Engine (Weeks 6-7)
@@ -64,5 +63,4 @@ This document outlines the phase-wise implementation plan for the **AI-Powered D
 *   **Tasks:**
     *   Conduct end-to-end testing of the query pipeline to ensure high relevance of RAG retrieval.
     *   Optimize LLM response times (leveraging Groq's fast inference speeds) and refine prompt structures for accuracy.
-    *   Containerize the application using Docker.
-    *   Deploy the backend, frontend, and databases to the target cloud infrastructure (e.g., AWS, GCP, Vercel/Render).
+    *   Deploy the backend, frontend, and databases to the target cloud infrastructure (Render).

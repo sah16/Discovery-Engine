@@ -19,10 +19,9 @@ The system is composed of an asynchronous data pipeline for ingesting and proces
 
 *   **Frontend**: React (Next.js or Vite) with TailwindCSS, Recharts (for data visualization).
 *   **Backend**: Python (FastAPI) - ideal for data processing, LLM orchestration (LangChain/LlamaIndex), and asynchronous tasks.
-*   **Database (Vector)**: Pinecone, Weaviate, Qdrant, or PostgreSQL with `pgvector` for semantic search.
-*   **Database (Relational/Document)**: PostgreSQL or MongoDB for storing raw data, structured metadata, and application state.
-*   **LLM Provider**: Groq (`llama-3.3-70b-versatile`).
-*   **Embeddings**: open-source equivalents  BAAI/bge-large-en-v1.5
+*   **Database (Vector & Relational)**: Supabase (PostgreSQL with `pgvector` utilizing the Session Pooler for IPv4 access).
+*   **LLM Provider**: Groq (`openai/gpt-oss-120b - on_demand`).
+*   **Embeddings**: `all-MiniLM-L6-v2` (384 dimensions) via SentenceTransformers to accommodate Render's 512MB RAM free-tier limit.
 *   **Data Ingestion Orchestration**: Apache Airflow, Prefect, or simple CRON jobs running Python scripts (Scrapy, Apify).
 
 ---
