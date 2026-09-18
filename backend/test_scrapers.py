@@ -23,6 +23,16 @@ def test_ingestion():
             print("Reddit returned empty (expected if credentials are missing).")
     except Exception as e:
         print("Error with reddit scraper:", str(e))
+        
+    print("\nTesting Hacker News Scraper...")
+    try:
+        from app.ingestion.hn_scraper import fetch_hn_threads
+        hn_threads = fetch_hn_threads(limit=10)
+        print(f"Found {len(hn_threads)} matching Hacker News discussions.")
+        for r in hn_threads[:2]:
+            print(f"- {r['source']}: {r['url']} | {normalize_text(r['raw_text'])[:100]}...")
+    except Exception as e:
+        print("Error with Hacker News scraper:", str(e))
 
 if __name__ == "__main__":
     test_ingestion()

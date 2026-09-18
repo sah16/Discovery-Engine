@@ -1,41 +1,53 @@
 import logging
+from app.ingestion.reddit_scraper import fetch_reddit_threads
+from app.ingestion.app_store_scraper import fetch_app_reviews
+from app.ingestion.hn_scraper import fetch_hn_threads
+from app.ingestion.cleaner import normalize_text
 from app.database import SessionLocal
 from app.models import FeedbackRecord
-from .scrapers import reddit, playstore, appstore, support_forums, youtube
 
 logging.basicConfig(level=logging.INFO)
 logger = logging.getLogger(__name__)
 
 def run_ingestion_pipeline():
     """
-    Runs all scrapers and inserts new feedback records into the database.
+    Orchestrates the ingestion process: Scrape -> Clean -> Store
     """
     logger.info("Starting data ingestion pipeline...")
     
-    all_results = []
+    raw_data = []
     
-    logger.info("Scraping Reddit...")
-    all_results.extend(reddit.scrape())
+    # 1. Scrape Reddit
+    try:
+        logger.info("Fetching Reddit threads...")
+        reddit_data = fetch_reddit_threads(limit=20)
+        raw_data.extend(reddit_data)
+    except Exception as e:
+        logger.error(f"Failed to fetch Reddit data: {e}")
+        
+    # 2. Scrape App Store
+    try:
+        logger.info("Fetching App Store reviews...")
+        app_data = fetch_app_reviews(count=50)
+        raw_data.extend(app_data)
+    except Exception as e:
+        logger.error(f"Failed to fetch App Store data: {e}")
+
+    # 3. Scrape Hacker News
+    try:
+        logger.info("Fetching Hacker News discussions...")
+        hn_data = fetch_hn_threads(limit=40)
+        raw_data.extend(hn_data)
+    except Exception as e:
+        logger.error(f"Failed to fetch Hacker News data: {e}")
     
-    logger.info("Scraping Google Play Store...")
-    all_results.extend(playstore.scrape())
-    
-    logger.info("Scraping App Store...")
-    all_results.extend(appstore.scrape())
-    
-    logger.info("Scraping Google Support Forums...")
-    all_results.extend(support_forums.scrape())
-    
-    logger.info("Scraping YouTube Comments...")
-    all_results.extend(youtube.scrape())
-    
-    logger.info(f"Total records fetched: {len(all_results)}")
+    logger.info(f"Total records fetched: {len(raw_data)}")
     
     # Save to database
     db = SessionLocal()
     try:
         new_records = 0
-        for item in all_results:
+        for item in raw_data:
             # Basic deduplication strategy based on raw_text
             exists = db.query(FeedbackRecord).filter(FeedbackRecord.raw_text == item['raw_text']).first()
             if not exists:

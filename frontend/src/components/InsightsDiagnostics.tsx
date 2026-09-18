@@ -1,6 +1,6 @@
 import { useLocation, Link } from 'react-router-dom';
 import { useEffect, useState } from 'react';
-import { analyzeQuery, QueryResponse } from '../api';
+import { analyzeQuery, type QueryResponse } from '../api';
 
 export function InsightsDiagnostics() {
   const location = useLocation();

@@ -7,7 +7,7 @@ export default defineConfig({
   server: {
     proxy: {
       '/api': {
-        target: 'http://localhost:8000',
+        target: 'https://discovery-engine-4xy6.onrender.com',
         changeOrigin: true,
       }
     }
