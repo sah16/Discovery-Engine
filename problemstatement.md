@@ -68,3 +68,10 @@ Design and implement an **AI-Powered Discovery Engine** that:
      - Key missing memory components.
      - AI-generated analysis of the friction point.
      - Direct quotes and evidence from real users to support the identified problem.
+
+#### Technology Stack
+- **Database**: Supabase (PostgreSQL with `pgvector`)
+- **LLM**: `openai/gpt-oss-120b` (via Groq)
+- **Embeddings**: `all-MiniLM-L6-v2` (SentenceTransformers)
+- **Backend**: FastAPI
+- **Frontend**: React + TailwindCSS

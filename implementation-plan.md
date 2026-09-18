@@ -9,7 +9,7 @@ This document outlines the phase-wise implementation plan for the **AI-Powered D
     *   Set up the databases: 
         *   Unified DB (Supabase/PostgreSQL) with `pgvector` for both structured metadata and semantic embeddings.
     *   Integrate API keys and setup clients for:
-        *   **LLM Provider**: Groq (`openai/gpt-oss-120b - on_demand`).
+        *   **LLM Provider**: Groq (`openai/gpt-oss-120b`).
         *   **Embeddings**: `all-MiniLM-L6-v2` (SentenceTransformers, 384 dimensions).
     *   Define core data models and database schemas (e.g., `FeedbackRecord`, `ProcessedInsight`).
 
@@ -24,7 +24,7 @@ This document outlines the phase-wise implementation plan for the **AI-Powered D
 ## Phase 3: Data Processing & Vectorization (Weeks 3-4)
 **Goal:** Extract structured features from raw text and generate semantic embeddings for search.
 *   **Tasks:**
-    *   Implement an LLM extraction pipeline using Groq (`openai/gpt-oss-120b - on_demand`) to parse raw text and identify:
+    *   Implement an LLM extraction pipeline using Groq (`openai/gpt-oss-120b`) to parse raw text and identify:
         *   Target of search (e.g., receipt, vacation).
         *   Search strategy used.
         *   User emotion/frustration.
