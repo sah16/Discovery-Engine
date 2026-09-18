@@ -35,7 +35,7 @@ def fetch_app_reviews(count: int = 100) -> List[Dict[str, Any]]:
                 score = review.get('score', 5)
                 content = review.get('content', '').lower()
                 
-                if score <= 3 and any(k in content for k in keywords):
+                if any(k in content for k in keywords):
                     results.append({
                         "source": f"play_store/{app_name}",
                         "raw_text": review.get('content'),
@@ -55,7 +55,7 @@ def fetch_app_reviews(count: int = 100) -> List[Dict[str, Any]]:
                 score = review.get('rating', 5)
                 content = review.get('review', '').lower()
                 
-                if score <= 3 and any(k in content for k in keywords):
+                if any(k in content for k in keywords):
                     results.append({
                         "source": f"app_store/{app['app_name']}",
                         "raw_text": review.get('review'),
