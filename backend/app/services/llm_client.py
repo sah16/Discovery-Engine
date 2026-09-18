@@ -120,9 +120,11 @@ def synthesize_insights(query: str, retrieved_context: List[dict]) -> dict:
     prompt = f"""
     You are an expert product analyst. Analyze the following user feedback threads retrieved for the query: "{query}".
     
-    Based ONLY on the provided threads, generate a structured JSON output with two keys:
-    1. "insights": A list of objects, each containing a "title" (short category/problem name) and a "description" (detailed qualitative insight or root cause analysis).
-    2. "evidence": A list of objects, each containing a direct "quote" extracted EXACTLY from the text, and the "source_thread_id" (integer) it came from.
+    Your goal is to deeply analyze the evidence, compare different retrieval problems, and identify actionable product opportunity areas.
+    Based ONLY on the provided threads, generate a structured JSON output with THREE keys:
+    1. "retrieval_problems": A list of objects. Each object must have a "title" and "description". Limit to the top 3-4 problems.
+    2. "opportunity_areas": A list of objects. For EVERY retrieval problem, provide a corresponding opportunity area object with a "title" and "description". Do not generate opportunities for minor or edge-case problems.
+    3. "evidence": A list of objects, each containing a direct "quote" extracted EXACTLY from the text, and the "source_thread_id" (integer) it came from.
     
     Feedback Threads:
     {context_str}

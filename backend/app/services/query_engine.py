@@ -43,6 +43,8 @@ def perform_rag_query(query: str, db: Session, limit: int = 10) -> Dict[str, Any
         "intent": intent,
         "results": formatted_results,
         "metrics": metrics,
-        "insights": synthesis.get("insights", []),
+        "retrieval_problems": synthesis.get("retrieval_problems", None),
+        "opportunity_areas": synthesis.get("opportunity_areas", None),
+        "insights": synthesis.get("insights", None),
         "evidence": synthesis.get("evidence", [])
     }

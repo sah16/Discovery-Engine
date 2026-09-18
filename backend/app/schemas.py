@@ -30,5 +30,7 @@ class QueryResponse(BaseModel):
     intent: str
     results: List[RetrievedThread]
     metrics: QuantitativeMetrics
-    insights: List[SynthesizedInsight]
+    retrieval_problems: Optional[List[SynthesizedInsight]] = None
+    opportunity_areas: Optional[List[SynthesizedInsight]] = None
+    insights: Optional[List[SynthesizedInsight]] = None
     evidence: List[EvidenceQuote]
