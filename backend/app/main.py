@@ -12,6 +12,13 @@ from app.database import get_db
 from app.schemas import QueryRequest, QueryResponse
 from app.services.query_engine import perform_rag_query
 
+from sqlalchemy import text
+
+# Ensure vector extension is enabled before creating tables
+with engine.connect() as conn:
+    conn.execute(text("CREATE EXTENSION IF NOT EXISTS vector"))
+    conn.commit()
+
 # Create database tables
 Base.metadata.create_all(bind=engine)
 
