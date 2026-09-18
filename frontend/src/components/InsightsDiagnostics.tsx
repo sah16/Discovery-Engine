@@ -339,52 +339,42 @@ export function InsightsDiagnostics() {
                   Ready for Action
                 </span>
               </div>
-              <div className="bg-surface-container-lowest p-space-md rounded-xl relative overflow-hidden">
-                <div className="absolute left-0 top-0 bottom-0 w-1 bg-gradient-to-b from-primary via-secondary to-tertiary"></div>
-                <span className="font-label-sm text-label-sm text-secondary uppercase tracking-wider font-semibold">Primary Opportunity Area</span>
-                <h3 className="font-headline-sm text-headline-sm text-on-surface font-semibold mt-1">
-                  Transition from Temporal EXIF to Episodic Memory Anchors
-                </h3>
-                <p className="font-body-sm text-body-sm text-on-surface-variant mt-2 leading-relaxed">
-                  Users search through human narrative: mood, weather, people combinations, and sensory impressions (“the rainy dinner in Porto”). Current retrieval falls apart because indexing is rigidly pinned to ISO timestamps. Implementing sensory-relational indexing will recapture <strong className="text-primary font-semibold">58% of lost searches</strong>.
-                </p>
-              </div>
-              <div className="flex flex-col gap-space-sm">
-                <span className="font-label-sm text-label-sm text-on-surface uppercase tracking-wider">Critical Friction Vectors</span>
-                <div className="flex items-start gap-space-sm bg-surface-container-high/60 p-space-sm rounded-lg">
-                  <div className="w-7 h-7 rounded bg-tertiary/15 flex items-center justify-center shrink-0 mt-0.5">
-                    <span className="material-symbols-outlined text-[18px] text-tertiary">schedule</span>
+              {data?.insights && data.insights.length > 0 ? (
+                <>
+                  <div className="bg-surface-container-lowest p-space-md rounded-xl relative overflow-hidden">
+                    <div className="absolute left-0 top-0 bottom-0 w-1 bg-gradient-to-b from-primary via-secondary to-tertiary"></div>
+                    <span className="font-label-sm text-label-sm text-secondary uppercase tracking-wider font-semibold">Primary Opportunity Area</span>
+                    <h3 className="font-headline-sm text-headline-sm text-on-surface font-semibold mt-1">
+                      {data.insights[0].title}
+                    </h3>
+                    <p className="font-body-sm text-body-sm text-on-surface-variant mt-2 leading-relaxed">
+                      {data.insights[0].description}
+                    </p>
                   </div>
-                  <div className="flex flex-col">
-                    <span className="font-headline-sm text-headline-sm text-on-surface text-[14px]">Temporal Disconnect</span>
-                    <span className="font-body-sm text-body-sm text-on-surface-variant">
-                      91% of travel recollections omit the calendar year entirely; users search by life phase instead.
-                    </span>
-                  </div>
+                  {data.insights.length > 1 && (
+                    <div className="flex flex-col gap-space-sm mt-space-sm">
+                      <span className="font-label-sm text-label-sm text-on-surface uppercase tracking-wider">Critical Friction Vectors</span>
+                      {data.insights.slice(1).map((insight, idx) => (
+                        <div key={idx} className="flex items-start gap-space-sm bg-surface-container-high/60 p-space-sm rounded-lg">
+                          <div className="w-7 h-7 rounded bg-tertiary/15 flex items-center justify-center shrink-0 mt-0.5">
+                            <span className="material-symbols-outlined text-[18px] text-tertiary">analytics</span>
+                          </div>
+                          <div className="flex flex-col">
+                            <span className="font-headline-sm text-headline-sm text-on-surface text-[14px]">{insight.title}</span>
+                            <span className="font-body-sm text-body-sm text-on-surface-variant">
+                              {insight.description}
+                            </span>
+                          </div>
+                        </div>
+                      ))}
+                    </div>
+                  )}
+                </>
+              ) : (
+                <div className="bg-surface-container-lowest p-space-md rounded-xl relative overflow-hidden">
+                  <p className="font-body-sm text-body-sm text-on-surface-variant leading-relaxed">Loading insights or no insights found...</p>
                 </div>
-                <div className="flex items-start gap-space-sm bg-surface-container-high/60 p-space-sm rounded-lg">
-                  <div className="w-7 h-7 rounded bg-primary/15 flex items-center justify-center shrink-0 mt-0.5">
-                    <span className="material-symbols-outlined text-[18px] text-primary">receipt</span>
-                  </div>
-                  <div className="flex flex-col">
-                    <span className="font-headline-sm text-headline-sm text-on-surface text-[14px]">Transient Utility Neglect</span>
-                    <span className="font-body-sm text-body-sm text-on-surface-variant">
-                      Parking tickets, Wi-Fi stickers, and transit passes lack subject tags despite severe search urgency.
-                    </span>
-                  </div>
-                </div>
-                <div className="flex items-start gap-space-sm bg-surface-container-high/60 p-space-sm rounded-lg">
-                  <div className="w-7 h-7 rounded bg-secondary/15 flex items-center justify-center shrink-0 mt-0.5">
-                    <span className="material-symbols-outlined text-[18px] text-secondary">label_off</span>
-                  </div>
-                  <div className="flex flex-col">
-                    <span className="font-headline-sm text-headline-sm text-on-surface text-[14px]">Single-Label Semantic Collapse</span>
-                    <span className="font-body-sm text-body-sm text-on-surface-variant">
-                      Standard vision models label “restaurant table” rather than capturing ambient context like “romantic candlelight”.
-                    </span>
-                  </div>
-                </div>
-              </div>
+              )}
             </div>
             <div className="pt-space-md mt-space-md bg-surface-container-lowest/50 -mx-space-lg -mb-space-lg p-space-md rounded-b-xl flex items-center justify-between gap-space-sm">
               <div className="flex flex-col">
@@ -413,72 +403,22 @@ export function InsightsDiagnostics() {
                 </div>
               </div>
               <div className="flex flex-col gap-space-md">
-                <div className="bg-surface-container-lowest p-space-md rounded-xl shadow-md transition-all hover:bg-surface-container-high/50 flex flex-col gap-space-xs">
-                  <div className="flex items-center justify-between gap-space-sm">
-                    <div className="flex items-center gap-space-sm">
-                      <div className="w-8 h-8 rounded-full bg-tertiary/20 text-tertiary flex items-center justify-center font-label-sm text-label-sm font-semibold">ER</div>
-                      <div>
-                        <div className="font-headline-sm text-headline-sm text-on-surface text-[14px]">Elena Rostova</div>
-                        <div className="font-label-sm text-label-sm text-on-surface-variant">Verified Contributor • Lisbon, PT</div>
+                {data?.evidence?.map((item, idx) => (
+                  <div key={idx} className="bg-surface-container-lowest p-space-md rounded-xl shadow-md transition-all hover:bg-surface-container-high/50 flex flex-col gap-space-xs">
+                    <div className="flex items-center justify-between gap-space-sm">
+                      <div className="flex items-center gap-space-sm">
+                        <div className="w-8 h-8 rounded-full bg-primary/20 text-primary flex items-center justify-center font-label-sm text-label-sm font-semibold">U{idx+1}</div>
+                        <div>
+                          <div className="font-headline-sm text-headline-sm text-on-surface text-[14px]">User {item.source_thread_id}</div>
+                          <div className="font-label-sm text-label-sm text-on-surface-variant">Extracted Verbatim Quote</div>
+                        </div>
                       </div>
                     </div>
-                    <div className="flex items-center gap-space-xs">
-                      <span className="font-label-sm text-label-sm text-tertiary bg-tertiary/10 px-space-xs py-0.5 rounded-full font-medium flex items-center gap-1">
-                        <span className="w-1.5 h-1.5 rounded-full bg-tertiary"></span> High Frustration
-                      </span>
-                      <span className="font-label-sm text-label-sm text-on-surface-variant">18m ago</span>
-                    </div>
+                    <p className="font-body-md text-body-md text-on-surface-variant italic pl-space-xs border-l-2 border-primary/60 my-1 mt-3">
+                      “{item.quote}”
+                    </p>
                   </div>
-                  <div className="bg-surface-container-high/40 p-space-xs px-space-sm rounded font-mono text-label-sm text-primary flex items-center gap-space-xs mt-1">
-                    <span className="material-symbols-outlined text-[14px] text-on-surface-variant">search</span>
-                    <span className="truncate">Attempt: “blue rental car parked in lisbon alley 2022”</span>
-                  </div>
-                  <p className="font-body-md text-body-md text-on-surface-variant italic pl-space-xs border-l-2 border-tertiary/60 my-1">
-                    “I literally photographed the street nameplate and the dent on the bumper 2 years ago so I wouldn't lose my security deposit. Searching ‘rental car lisbon’ surfaced 400 sunset selfies from Cascais, but not the actual receipt card! I spent 45 minutes scrolling.”
-                  </p>
-                  <div className="flex items-center justify-between pt-space-xs text-on-surface-variant font-label-sm text-label-sm">
-                    <span className="flex items-center gap-space-xs text-on-surface-variant">
-                      <span className="material-symbols-outlined text-[15px] text-tertiary">priority_high</span> Result Rank: No Match (Searched 42 items)
-                    </span>
-                    <a className="text-primary hover:text-secondary flex items-center gap-0.5 font-medium" href="#">
-                      <span>Trace Log</span>
-                      <span className="material-symbols-outlined text-[14px]">arrow_forward</span>
-                    </a>
-                  </div>
-                </div>
-                <div className="bg-surface-container-lowest p-space-md rounded-xl shadow-md transition-all hover:bg-surface-container-high/50 flex flex-col gap-space-xs">
-                  <div className="flex items-center justify-between gap-space-sm">
-                    <div className="flex items-center gap-space-sm">
-                      <div className="w-8 h-8 rounded-full bg-secondary/20 text-secondary flex items-center justify-center font-label-sm text-label-sm font-semibold">MT</div>
-                      <div>
-                        <div className="font-headline-sm text-headline-sm text-on-surface text-[14px]">Marcus Thome</div>
-                        <div className="font-label-sm text-label-sm text-on-surface-variant">Verified Contributor • Munich, DE</div>
-                      </div>
-                    </div>
-                    <div className="flex items-center gap-space-xs">
-                      <span className="font-label-sm text-label-sm text-error bg-error/10 px-space-xs py-0.5 rounded-full font-medium flex items-center gap-1">
-                        <span className="w-1.5 h-1.5 rounded-full bg-error"></span> Critical Blocker
-                      </span>
-                      <span className="font-label-sm text-label-sm text-on-surface-variant">1h ago</span>
-                    </div>
-                  </div>
-                  <div className="bg-surface-container-high/40 p-space-xs px-space-sm rounded font-mono text-label-sm text-secondary flex items-center gap-space-xs mt-1">
-                    <span className="material-symbols-outlined text-[14px] text-on-surface-variant">search</span>
-                    <span className="truncate">Attempt: “insurance policy slip yellow binder”</span>
-                  </div>
-                  <p className="font-body-md text-body-md text-on-surface-variant italic pl-space-xs border-l-2 border-secondary/60 my-1">
-                    “I was at the clinic counter needing my international health policy code. The app kept returning photos of a yellow taxi in Athens and yellow curry bowls. It totally ignored the printed German document text inside the photo!”
-                  </p>
-                  <div className="flex items-center justify-between pt-space-xs text-on-surface-variant font-label-sm text-label-sm">
-                    <span className="flex items-center gap-space-xs text-on-surface-variant">
-                      <span className="material-symbols-outlined text-[15px] text-error">cancel</span> Result Rank: False Positive (Precision 0.08)
-                    </span>
-                    <a className="text-primary hover:text-secondary flex items-center gap-0.5 font-medium" href="#">
-                      <span>Trace Log</span>
-                      <span className="material-symbols-outlined text-[14px]">arrow_forward</span>
-                    </a>
-                  </div>
-                </div>
+                ))}
               </div>
             </div>
             <div className="pt-space-md mt-space-md bg-surface-container-lowest/50 -mx-space-lg -mb-space-lg p-space-md rounded-b-xl flex flex-col sm:flex-row items-center justify-between gap-space-sm">
