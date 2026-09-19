@@ -7,7 +7,7 @@ export default defineConfig({
   server: {
     proxy: {
       '/api': {
-        target: 'https://discovery-engine-4xy6.onrender.com',
+        target: 'https://discovery-6nq4.onrender.com',
         changeOrigin: true,
       }
     }
