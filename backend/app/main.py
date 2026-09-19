@@ -16,10 +16,13 @@ from app.services.query_engine import perform_rag_query
 # Create database tables
 Base.metadata.create_all(bind=engine)
 
+from app.services.embedding_client import init_model
+
 @asynccontextmanager
 async def lifespan(app: FastAPI):
     # Startup
     start_scheduler()
+    init_model()
     yield
     # Shutdown
     stop_scheduler()
@@ -60,9 +63,9 @@ def trigger_processing(background_tasks: BackgroundTasks):
     return {"status": "ok", "message": "Data processing started in the background"}
 
 @app.post("/api/query", response_model=QueryResponse)
-def query_rag_engine(request: QueryRequest, db: Session = Depends(get_db)):
+async def query_rag_engine(request: QueryRequest, db: Session = Depends(get_db)):
     """
     Infers intent and retrieves relevant feedback threads using RAG.
     """
-    result = perform_rag_query(request.query, db, limit=10)
+    result = await perform_rag_query(request.query, db, limit=10)
     return result

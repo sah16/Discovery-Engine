@@ -1,9 +1,10 @@
 import os
-from groq import Groq
+from groq import AsyncGroq
 from typing import List, Dict
 from app.config import settings
+import json
 
-def get_groq_client() -> Groq:
+def get_groq_client() -> AsyncGroq:
     """
     Initializes and returns the Groq client.
     """
@@ -12,10 +13,10 @@ def get_groq_client() -> Groq:
         print("Warning: GROQ_API_KEY is not set.")
     
     # Initialize the client. In a real scenario, this would be a singleton or dependency injected.
-    client = Groq(api_key=api_key)
+    client = AsyncGroq(api_key=api_key)
     return client
 
-def infer_intent(query: str) -> str:
+async def infer_intent(query: str) -> str:
     """
     Classifies a natural language query into one of the defined intent categories using Groq.
     """
@@ -36,7 +37,7 @@ def infer_intent(query: str) -> str:
     "{query}"
     """
     try:
-        chat_completion = client.chat.completions.create(
+        chat_completion = await client.chat.completions.create(
             messages=[
                 {
                     "role": "system",
@@ -102,7 +103,7 @@ def extract_features(text: str) -> dict:
             "forgotten_attributes": []
         }
 
-def synthesize_insights(query: str, retrieved_context: List[dict]) -> dict:
+async def synthesize_insights(query: str, retrieved_context: List[dict]) -> dict:
     """
     Analyzes the retrieved context to produce structured qualitative insights,
     categorized retrieval problems, and direct supporting quotes using Groq.
@@ -129,7 +130,7 @@ def synthesize_insights(query: str, retrieved_context: List[dict]) -> dict:
     """
     
     try:
-        chat_completion = client.chat.completions.create(
+        chat_completion = await client.chat.completions.create(
             messages=[
                 {
                     "role": "system",

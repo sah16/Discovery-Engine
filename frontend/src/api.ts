@@ -33,10 +33,9 @@ export interface QueryResponse {
   evidence: EvidenceQuote[];
 }
 
-const API_BASE_URL = import.meta.env.VITE_API_BASE_URL || '';
-
 export const analyzeQuery = async (query: string): Promise<QueryResponse> => {
-  const response = await fetch(`${API_BASE_URL}/api/query`, {
+  // Use relative path so it routes through Vite proxy locally or Render Rewrites in prod
+  const response = await fetch('/api/query', {
     method: 'POST',
     headers: {
       'Content-Type': 'application/json',

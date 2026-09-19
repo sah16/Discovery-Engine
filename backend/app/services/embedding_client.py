@@ -6,11 +6,19 @@ from typing import List
 # Using BAAI/bge-large-en-v1.5 as per architecture
 _model = None
 
-def get_embedding_model() -> SentenceTransformer:
+def init_model() -> None:
+    """
+    Preloads the model into memory. Call this at application startup.
+    """
     global _model
     if _model is None:
         print(f"Loading embedding model: {settings.EMBEDDING_MODEL_NAME}...")
         _model = SentenceTransformer(settings.EMBEDDING_MODEL_NAME)
+
+def get_embedding_model() -> SentenceTransformer:
+    global _model
+    if _model is None:
+        init_model()
     return _model
 
 def get_embedding(text: str) -> List[float]:

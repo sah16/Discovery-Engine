@@ -5,20 +5,23 @@ from app.services.synthesis_engine import quantify_metrics
 from app.services.embedding_client import get_embedding
 from typing import Dict, Any
 
-def perform_rag_query(query: str, db: Session, limit: int = 10) -> Dict[str, Any]:
+import asyncio
+
+async def perform_rag_query(query: str, db: Session, limit: int = 10) -> Dict[str, Any]:
     """
     Performs Intent Inference and RAG retrieval for a natural language query.
     """
     print(f"\n[RAG Pipeline] Starting query analysis for: '{query}'")
     
-    # 1. Infer the user's intent
-    print("[RAG Pipeline] Step 1: Inferring user intent via LLM...")
-    intent = infer_intent(query)
-    print(f"[RAG Pipeline] -> Intent inferred: {intent}")
+    print("[RAG Pipeline] Steps 1 & 2: Inferring intent (LLM) and generating embedding (CPU) in parallel...")
+    # Run LLM intent inference and CPU-bound embedding generation in parallel!
+    loop = asyncio.get_event_loop()
+    intent_task = asyncio.create_task(infer_intent(query))
+    embedding_task = loop.run_in_executor(None, get_embedding, query)
     
-    # 2. Get the vector embedding of the query
-    print("[RAG Pipeline] Step 2: Generating vector embedding for query...")
-    query_vector = get_embedding(query)
+    intent, query_vector = await asyncio.gather(intent_task, embedding_task)
+    print(f"[RAG Pipeline] -> Intent inferred: {intent}")
+    print("[RAG Pipeline] -> Embedding generated.")
     
     # 3. Perform similarity search in Postgres with pgvector
     print(f"[RAG Pipeline] Step 3: Searching pgvector database for top {limit} closest threads...")
@@ -58,7 +61,7 @@ def perform_rag_query(query: str, db: Session, limit: int = 10) -> Dict[str, Any
     metrics = quantify_metrics(formatted_results)
     
     print("[RAG Pipeline] Step 5: Synthesizing qualitative insights via LLM...")
-    synthesis = synthesize_insights(query, formatted_results)
+    synthesis = await synthesize_insights(query, formatted_results)
     
     print("[RAG Pipeline] Pipeline complete! Returning response to frontend.\n")
         
