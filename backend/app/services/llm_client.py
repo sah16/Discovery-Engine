@@ -47,7 +47,7 @@ def infer_intent(query: str) -> str:
                     "content": prompt,
                 }
             ],
-            model="llama-3.1-8b-instant",
+            model="openai/gpt-oss-120b",
             response_format={"type": "json_object"},
             temperature=0.0
         )
@@ -89,7 +89,7 @@ def extract_features(text: str) -> dict:
                     "content": prompt,
                 }
             ],
-            model="llama-3.1-8b-instant",
+            model="openai/gpt-oss-120b",
             response_format={"type": "json_object"},
             temperature=0.0
         )
@@ -140,7 +140,7 @@ def synthesize_insights(query: str, retrieved_context: List[dict]) -> dict:
                     "content": prompt,
                 }
             ],
-            model="llama-3.1-8b-instant",
+            model="openai/gpt-oss-120b",
             response_format={"type": "json_object"},
             temperature=0.0
         )
