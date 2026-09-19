@@ -6,7 +6,7 @@ export function InsightsDiagnostics() {
   const location = useLocation();
   const query = location.state?.query || 'What do people actually remember about old travel photos?';
   const initialData = location.state?.data as QueryResponse | undefined;
-  
+
   const [data, setData] = useState<QueryResponse | null>(initialData || null);
   const [isLoading, setIsLoading] = useState(!initialData);
 
@@ -53,121 +53,114 @@ export function InsightsDiagnostics() {
         </div>
       </div>
 
-      {/* Metrics Section: Memory & Forgotten Information */}
-      {data?.metrics && (
-        <div className="grid grid-cols-1 lg:grid-cols-2 gap-gutter mt-space-md">
-          {/* View 3 - Memory */}
-          <div className="flex flex-col gap-space-sm">
-            <h2 className="font-headline-md text-headline-md text-on-surface font-medium">
-              View 3 — Memory
-            </h2>
-            <p className="text-on-surface-variant font-body-md mb-2">What information do people remember?</p>
-            <div className="bg-surface-container p-space-lg rounded-xl flex flex-col gap-3 relative">
-              <button className="absolute top-4 right-4 text-outline hover:text-on-surface transition-colors" title="Copy data">
-                <span className="material-symbols-outlined text-[20px]">content_copy</span>
-              </button>
-              {Object.entries(data.metrics.remembered_attributes || {})
-                .sort((a,b) => b[1] - a[1])
-                .map(([key, value]) => (
-                <div key={key} className="flex justify-start gap-10 items-center">
-                  <span className="text-on-surface-variant font-mono text-sm w-24">{key}</span>
-                  <span className="text-on-surface font-body-sm font-medium">{value}%</span>
+      {/* Main Layout Grid */}
+      <div className="grid grid-cols-1 lg:grid-cols-2 gap-gutter mt-space-md items-start">
+        
+        {/* Top Left: Retrieval Problems */}
+        <div className="bg-surface-container p-space-lg rounded-xl shadow-xl border-l-4 border-error/70 flex flex-col gap-space-md h-full">
+          <h2 className="font-headline-md text-headline-md text-error font-medium flex items-center gap-2">
+            <span className="material-symbols-outlined text-[20px]">warning</span>
+            Identified Retrieval Problems
+          </h2>
+          <div className="flex flex-col gap-space-sm h-full">
+            {problems.length ? (
+              problems.map((insight, idx) => (
+                <div key={`prob-${idx}`} className="bg-error/5 p-space-md rounded-lg border border-error/10 hover:border-error/30 transition-colors">
+                  <h3 className="font-headline-sm text-headline-sm text-on-surface font-semibold mb-1">
+                    {insight.title.replace(/retrieval problem:\s*/i, '').trim()}
+                  </h3>
+                  <p className="font-body-sm text-body-sm text-on-surface-variant leading-relaxed">
+                    {insight.description}
+                  </p>
                 </div>
-              ))}
-              {Object.keys(data.metrics.remembered_attributes || {}).length === 0 && (
-                <p className="text-on-surface-variant text-sm italic">No data available.</p>
-              )}
-            </div>
-            <div className="flex items-center gap-2 mt-2 border-l-2 border-primary/50 pl-3">
-              <p className="text-on-surface-variant font-body-sm italic">
-                Multiple attributes may be remembered per retrieval episode.
-              </p>
-            </div>
-          </div>
-
-          {/* View 4 - Forgotten information */}
-          <div className="flex flex-col gap-space-sm">
-            <h2 className="font-headline-md text-headline-md text-on-surface font-medium">
-              View 4 — Forgotten information
-            </h2>
-            <div className="bg-surface-container p-space-lg rounded-xl flex flex-col gap-3 mt-9 relative">
-              <button className="absolute top-4 right-4 text-outline hover:text-on-surface transition-colors" title="Copy data">
-                <span className="material-symbols-outlined text-[20px]">content_copy</span>
-              </button>
-              {Object.entries(data.metrics.forgotten_attributes || {})
-                .sort((a,b) => b[1] - a[1])
-                .map(([key, value]) => (
-                <div key={key} className="flex justify-start gap-10 items-center">
-                  <span className="text-on-surface-variant font-mono text-sm w-32">{key}</span>
-                  <span className="text-on-surface font-body-sm font-medium">{value}%</span>
-                </div>
-              ))}
-              {Object.keys(data.metrics.forgotten_attributes || {}).length === 0 && (
-                <p className="text-on-surface-variant text-sm italic">No data available.</p>
-              )}
-            </div>
+              ))
+            ) : (
+              <p className="text-on-surface-variant text-sm italic">{isLoading ? 'Analyzing...' : 'No problems identified.'}</p>
+            )}
           </div>
         </div>
-      )}
 
-      {/* Section 3: Synthesis & Evidence */}
-      <div className="grid grid-cols-1 lg:grid-cols-12 gap-gutter mt-space-md">
-        {/* Left Panel: Problems vs Opportunities */}
-        <div className="lg:col-span-7 flex flex-col gap-space-lg">
-          
-          {/* Retrieval Problems */}
-          <div className="bg-surface-container p-space-lg rounded-xl shadow-xl border-l-4 border-error/70 flex flex-col gap-space-md">
-            <h2 className="font-headline-md text-headline-md text-error font-medium flex items-center gap-2">
-              <span className="material-symbols-outlined text-[20px]">warning</span>
-              Identified Retrieval Problems
-            </h2>
-            <div className="flex flex-col gap-space-sm">
-              {problems.length ? (
-                problems.map((insight, idx) => (
-                  <div key={`prob-${idx}`} className="bg-error/5 p-space-md rounded-lg border border-error/10 hover:border-error/30 transition-colors">
-                    <h3 className="font-headline-sm text-headline-sm text-on-surface font-semibold mb-1">
-                      {insight.title.replace(/retrieval problem:\s*/i, '').trim()}
-                    </h3>
-                    <p className="font-body-sm text-body-sm text-on-surface-variant leading-relaxed">
-                      {insight.description}
-                    </p>
-                  </div>
-                ))
-              ) : (
-                <p className="text-on-surface-variant text-sm italic">{isLoading ? 'Analyzing...' : 'No problems identified.'}</p>
-              )}
-            </div>
+        {/* Top Right: Opportunity Areas */}
+        <div className="bg-surface-container p-space-lg rounded-xl shadow-xl border-l-4 border-primary/70 flex flex-col gap-space-md h-full">
+          <h2 className="font-headline-md text-headline-md text-primary font-medium flex items-center gap-2">
+            <span className="material-symbols-outlined text-[20px]">lightbulb</span>
+            Opportunity Areas
+          </h2>
+          <div className="flex flex-col gap-space-sm h-full">
+            {opportunities.length ? (
+              opportunities.map((insight, idx) => (
+                <div key={`opp-${idx}`} className="bg-primary/5 p-space-md rounded-lg border border-primary/10 hover:border-primary/30 transition-colors">
+                  <h3 className="font-headline-sm text-headline-sm text-on-surface font-semibold mb-1">
+                    {insight.title.replace(/opportunity area:\s*/i, '').trim()}
+                  </h3>
+                  <p className="font-body-sm text-body-sm text-on-surface-variant leading-relaxed">
+                    {insight.description}
+                  </p>
+                </div>
+              ))
+            ) : (
+              <p className="text-on-surface-variant text-sm italic">{isLoading ? 'Analyzing...' : 'No opportunities identified.'}</p>
+            )}
           </div>
-
-          {/* Opportunity Areas */}
-          <div className="bg-surface-container p-space-lg rounded-xl shadow-xl border-l-4 border-primary/70 flex flex-col gap-space-md">
-            <h2 className="font-headline-md text-headline-md text-primary font-medium flex items-center gap-2">
-              <span className="material-symbols-outlined text-[20px]">lightbulb</span>
-              Opportunity Areas
-            </h2>
-            <div className="flex flex-col gap-space-sm">
-              {opportunities.length ? (
-                opportunities.map((insight, idx) => (
-                  <div key={`opp-${idx}`} className="bg-primary/5 p-space-md rounded-lg border border-primary/10 hover:border-primary/30 transition-colors">
-                    <h3 className="font-headline-sm text-headline-sm text-on-surface font-semibold mb-1">
-                      {insight.title.replace(/opportunity area:\s*/i, '').trim()}
-                    </h3>
-                    <p className="font-body-sm text-body-sm text-on-surface-variant leading-relaxed">
-                      {insight.description}
-                    </p>
-                  </div>
-                ))
-              ) : (
-                <p className="text-on-surface-variant text-sm italic">{isLoading ? 'Analyzing...' : 'No opportunities identified.'}</p>
-              )}
-            </div>
-          </div>
-
         </div>
 
-        {/* Right Panel: Voice of the User */}
-        <div className="lg:col-span-5 bg-surface-container p-space-lg rounded-xl shadow-xl flex flex-col">
-          <div className="flex flex-col gap-space-md mb-space-md">
+        {/* Bottom Left: Memory and Forgotten Information */}
+        {data?.metrics && (Object.keys(data.metrics.remembered_attributes || {}).length > 0 || Object.keys(data.metrics.forgotten_attributes || {}).length > 0) ? (
+          <div className="flex flex-col gap-gutter">
+            {Object.keys(data.metrics.remembered_attributes || {}).length > 0 && (
+              <div className="flex flex-col gap-space-sm">
+                <h2 className="font-headline-md text-headline-md text-on-surface font-medium">
+                  Memory
+                </h2>
+                <p className="text-on-surface-variant font-body-md mb-2">What information do people remember?</p>
+                <div className="bg-surface-container p-space-lg rounded-xl shadow-xl flex flex-col gap-3 relative">
+                  <button className="absolute top-4 right-4 text-outline hover:text-on-surface transition-colors" title="Copy data">
+                    <span className="material-symbols-outlined text-[20px]">content_copy</span>
+                  </button>
+                  {Object.entries(data.metrics.remembered_attributes || {})
+                    .sort((a, b) => b[1] - a[1])
+                    .map(([key, value]) => (
+                      <div key={key} className="flex justify-start gap-10 items-center">
+                        <span className="text-on-surface-variant font-mono text-sm w-24">{key}</span>
+                        <span className="text-on-surface font-body-sm font-medium">{value}%</span>
+                      </div>
+                    ))}
+                </div>
+                <div className="flex items-center gap-2 mt-2 border-l-2 border-primary/50 pl-3">
+                  <p className="text-on-surface-variant font-body-sm italic">
+                    Multiple attributes may be remembered per retrieval episode.
+                  </p>
+                </div>
+              </div>
+            )}
+            {Object.keys(data.metrics.forgotten_attributes || {}).length > 0 && (
+              <div className="flex flex-col gap-space-sm mt-space-sm">
+                <h2 className="font-headline-md text-headline-md text-on-surface font-medium">
+                  Forgotten information
+                </h2>
+                <div className="bg-surface-container p-space-lg rounded-xl shadow-xl flex flex-col gap-3 relative">
+                  <button className="absolute top-4 right-4 text-outline hover:text-on-surface transition-colors" title="Copy data">
+                    <span className="material-symbols-outlined text-[20px]">content_copy</span>
+                  </button>
+                  {Object.entries(data.metrics.forgotten_attributes || {})
+                    .sort((a, b) => b[1] - a[1])
+                    .map(([key, value]) => (
+                      <div key={key} className="flex justify-start gap-10 items-center">
+                        <span className="text-on-surface-variant font-mono text-sm w-32">{key}</span>
+                        <span className="text-on-surface font-body-sm font-medium">{value}%</span>
+                      </div>
+                    ))}
+                </div>
+              </div>
+            )}
+          </div>
+        ) : (
+          <div className="hidden lg:block"></div>
+        )}
+
+        {/* Bottom Right: Voice of the User */}
+        <div className="bg-surface-container p-space-lg rounded-xl shadow-xl flex flex-col h-full max-h-[800px]">
+          <div className="flex flex-col gap-space-md mb-space-md shrink-0">
             <div>
               <h2 className="font-headline-md text-headline-md text-on-surface font-medium flex items-center gap-2">
                 <span className="material-symbols-outlined text-[20px] text-tertiary">record_voice_over</span>
@@ -178,8 +171,8 @@ export function InsightsDiagnostics() {
               </p>
             </div>
           </div>
-          
-          <div className="flex flex-col gap-space-md overflow-y-auto pr-2 custom-scrollbar flex-1 max-h-[600px]">
+
+          <div className="flex flex-col gap-space-md overflow-y-auto pr-2 custom-scrollbar flex-1">
             {data?.evidence?.length ? data.evidence.map((item, idx) => (
               <div key={idx} className="bg-surface-container-lowest p-space-md rounded-xl shadow-sm border border-outline-variant hover:shadow-md transition-shadow relative">
                 <div className="absolute top-2 left-2 text-tertiary/20">
@@ -198,6 +191,7 @@ export function InsightsDiagnostics() {
             )}
           </div>
         </div>
+
       </div>
     </div>
   );
