@@ -39,37 +39,37 @@ export function SearchConsole() {
         <div className="absolute -top-40 left-1/2 -translate-x-1/2 w-[760px] h-[380px] bg-primary/10 rounded-full blur-[120px] pointer-events-none"></div>
         <div className="absolute top-28 left-1/3 -translate-x-1/2 w-[460px] h-[280px] bg-secondary/10 rounded-full blur-[100px] pointer-events-none"></div>
         <div className="absolute top-52 right-1/4 w-[340px] h-[240px] bg-tertiary-container/10 rounded-full blur-[90px] pointer-events-none"></div>
-        
+
         <div className="relative z-10 w-full max-w-5xl flex flex-col items-center text-center mt-12">
 
           <h1 className="font-headline-2xl text-headline-2xl text-on-surface tracking-tight max-w-4xl mx-auto leading-tight">
             Analyze Photo Retrieval <span className="bg-gradient-to-r from-primary via-secondary to-tertiary-fixed bg-clip-text text-transparent">Failure Modes</span>
           </h1>
-          
+
           <p className="font-body-lg text-body-lg text-on-surface-variant max-w-2xl mt-space-md mb-space-xl">
             Uncover how people remember old visual information and where existing retrieval experiences break down.
           </p>
-          
+
           <div className="w-full relative group">
             <div className="absolute -inset-1 rounded-2xl bg-gradient-to-r from-primary/30 via-secondary/20 to-primary/30 blur-xl opacity-60 group-hover:opacity-100 transition duration-500 pointer-events-none"></div>
             <div className="relative w-full rounded-2xl bg-surface-container/75 backdrop-blur-2xl p-space-sm shadow-2xl shadow-black/60 flex flex-col md:flex-row items-center gap-space-sm">
               <div className="pl-space-md text-primary flex items-center justify-center shrink-0">
                 <span className="material-symbols-outlined text-[28px]">travel_explore</span>
               </div>
-              
+
               <div className="relative flex-1 w-full">
-                <input 
-                  className="w-full bg-transparent px-space-sm py-space-md text-on-surface font-headline-sm text-headline-sm focus:outline-none placeholder:text-outline placeholder:font-body-md" 
-                  placeholder="What do people actually remember about old travel photos?" 
-                  type="text" 
+                <input
+                  className="w-full bg-transparent px-space-sm py-space-md text-on-surface font-headline-sm text-headline-sm focus:outline-none placeholder:text-outline placeholder:font-body-md"
+                  placeholder="What do people actually remember about old travel photos?"
+                  type="text"
                   value={query}
                   onChange={(e) => setQuery(e.target.value)}
                   onKeyDown={(e) => e.key === 'Enter' && handleSearch()}
                 />
                 {query && (
-                  <button 
-                    aria-label="Clear query" 
-                    className="absolute right-space-sm top-1/2 -translate-y-1/2 text-outline-variant hover:text-on-surface-variant transition-colors p-1" 
+                  <button
+                    aria-label="Clear query"
+                    className="absolute right-space-sm top-1/2 -translate-y-1/2 text-outline-variant hover:text-on-surface-variant transition-colors p-1"
                     type="button"
                     onClick={() => setQuery('')}
                   >
@@ -77,10 +77,10 @@ export function SearchConsole() {
                   </button>
                 )}
               </div>
-              
+
               <div className="flex items-center gap-space-sm w-full md:w-auto shrink-0 justify-end">
-                <button 
-                  className="w-full md:w-auto px-space-lg py-space-md rounded-xl bg-gradient-to-r from-primary-container via-secondary-container to-tertiary-container hover:brightness-110 active:scale-95 text-on-primary font-headline-sm text-headline-sm font-semibold flex items-center justify-center gap-space-sm shadow-lg shadow-primary-container/20 transition-all duration-200 disabled:opacity-70 disabled:cursor-not-allowed" 
+                <button
+                  className="w-full md:w-auto px-space-lg py-space-md rounded-xl bg-gradient-to-r from-primary-container via-secondary-container to-tertiary-container hover:brightness-110 active:scale-95 text-on-primary font-headline-sm text-headline-sm font-semibold flex items-center justify-center gap-space-sm shadow-lg shadow-primary-container/20 transition-all duration-200 disabled:opacity-70 disabled:cursor-not-allowed"
                   type="button"
                   onClick={handleSearch}
                   disabled={isAnalyzing}
@@ -100,10 +100,10 @@ export function SearchConsole() {
               </div>
             </div>
           </div>
-          
+
           <div className="w-full flex flex-wrap items-center justify-center gap-space-sm mt-space-lg">
             <span className="font-label-sm text-label-sm text-outline uppercase tracking-wider mr-space-xs">Quick Seed Prompts:</span>
-            
+
             <button onClick={() => handleQuickPill('What do users do when search fails them?')} className="quick-pill rounded-full px-space-md py-1.5 bg-surface-container hover:bg-surface-container-high text-primary font-label-md text-label-md transition-all duration-150 flex items-center gap-space-xs group shadow-sm" type="button">
               <span className="material-symbols-outlined text-[14px] text-primary group-hover:rotate-12 transition-transform">alt_route</span>
               <span>User Workarounds</span>
@@ -121,7 +121,7 @@ export function SearchConsole() {
               <span>Search Breakdowns</span>
             </button>
           </div>
-          
+
           <div className="w-full mt-space-xl p-space-sm rounded-xl bg-surface-container-lowest/80 backdrop-blur-md shadow-inner flex flex-wrap items-center justify-center gap-x-space-md gap-y-space-xs text-on-surface-variant font-label-sm text-label-sm">
             <div className="flex items-center gap-space-xs">
               <span className="material-symbols-outlined text-[14px] text-primary">hub</span>
@@ -158,7 +158,7 @@ export function SearchConsole() {
             Updated 14 mins ago • Real Telemetry Cohort
           </span>
         </div>
-        
+
         <div className="grid grid-cols-1 md:grid-cols-3 gap-gutter">
           <div className="query-card group rounded-2xl bg-surface-container-low hover:bg-surface-container transition-all duration-300 p-space-lg shadow-xl shadow-black/30 flex flex-col justify-between relative overflow-hidden cursor-pointer" onClick={() => handleCardClick('What kinds of photos do users struggle to retrieve the most?')}>
             <div className="absolute top-0 right-0 w-32 h-32 bg-primary/5 rounded-full blur-2xl group-hover:bg-primary/10 transition-all pointer-events-none"></div>
@@ -183,7 +183,7 @@ export function SearchConsole() {
               </button>
             </div>
           </div>
-          
+
           <div className="query-card group rounded-2xl bg-surface-container-low hover:bg-surface-container transition-all duration-300 p-space-lg shadow-xl shadow-black/30 flex flex-col justify-between relative overflow-hidden cursor-pointer" onClick={() => handleCardClick('What information is forgotten first when looking for old events?')}>
             <div className="absolute top-0 right-0 w-32 h-32 bg-secondary/5 rounded-full blur-2xl group-hover:bg-secondary/10 transition-all pointer-events-none"></div>
             <div>
@@ -194,7 +194,7 @@ export function SearchConsole() {
 
               </div>
               <h3 className="font-headline-md text-headline-md text-on-surface font-medium leading-snug group-hover:text-secondary transition-colors">
-                What information is forgotten first when looking for old events?
+                What information is forgotten first when looking for old photos?
               </h3>
               <p className="font-body-md text-body-md text-on-surface-variant mt-space-sm">
                 Users retain visual cues and people reliably, but exact dates and locations are forgotten 86% of the time.
@@ -207,7 +207,7 @@ export function SearchConsole() {
               </button>
             </div>
           </div>
-          
+
           <div className="query-card group rounded-2xl bg-surface-container-low hover:bg-surface-container transition-all duration-300 p-space-lg shadow-xl shadow-black/30 flex flex-col justify-between relative overflow-hidden cursor-pointer" onClick={() => handleCardClick('Why do searches fail even when the user knows the photo exists?')}>
             <div className="absolute top-0 right-0 w-32 h-32 bg-tertiary-container/5 rounded-full blur-2xl group-hover:bg-tertiary-container/10 transition-all pointer-events-none"></div>
             <div>
@@ -232,7 +232,7 @@ export function SearchConsole() {
             </div>
           </div>
         </div>
-        
+
 
       </section>
     </div>
