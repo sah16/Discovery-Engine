@@ -130,6 +130,8 @@ async def synthesize_insights(query: str, retrieved_context: List[dict], metrics
     
     CRITICAL INSTRUCTION 2 (ACTIONABILITY & QUANTIFICATION): Your goal is to deeply analyze the evidence, compare different retrieval problems, and identify highly actionable product opportunity areas based ONLY on the relevant threads. You MUST incorporate the quantitative statistics (percentages) provided above into your descriptions of the retrieval problems to ground them in hard data (e.g., 'Users forget exact dates 86% of the time, leading to...'). 
     
+    CRITICAL INSTRUCTION 3 (NO INTERNAL IDENTIFIERS): You MUST NOT mention internal data identifiers like "Thread 24" or "Thread 9" in your titles or descriptions for retrieval_problems or opportunity_areas. The end user does not know what a "Thread" is. Synthesize the findings into general observations about user behavior. (You will only use the source_thread_id in the evidence list, not in the text descriptions).
+    
     Generate a structured JSON output with THREE keys:
     1. "retrieval_problems": A list of objects. Each object must have a "title" and "description". Limit to the top 3-4 problems. Ensure descriptions include relevant quantitative metrics.
     2. "opportunity_areas": A list of objects. For EVERY retrieval problem, provide a corresponding opportunity area object with a "title" and "description". The description MUST propose specific, actionable product features, UI changes, or algorithmic improvements. DO NOT generate vague conceptual statements (e.g., "improve search").
