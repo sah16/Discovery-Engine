@@ -11,12 +11,13 @@ class RetrievedThread(BaseModel):
     target_intent: Optional[str] = None
     search_strategy: Optional[str] = None
     emotion: Optional[str] = None
+    remembered_attributes: Optional[List[str]] = None
+    forgotten_attributes: Optional[List[str]] = None
     similarity_score: Optional[float] = None
 
 class QuantitativeMetrics(BaseModel):
-    target_intents: Dict[str, float]
-    search_strategies: Dict[str, float]
-    emotions: Dict[str, float]
+    remembered_attributes: Dict[str, float]
+    forgotten_attributes: Dict[str, float]
 
 class SynthesizedInsight(BaseModel):
     title: str
