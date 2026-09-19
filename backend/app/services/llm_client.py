@@ -114,15 +114,20 @@ async def synthesize_insights(query: str, retrieved_context: List[dict]) -> dict
     for r in retrieved_context:
         context_str += f"Thread ID: {r.get('id')}\n"
         context_str += f"Text: {r.get('raw_text')}\n"
+        context_str += f"Remembered Attributes: {r.get('remembered_attributes', [])}\n"
+        context_str += f"Forgotten Attributes: {r.get('forgotten_attributes', [])}\n"
         context_str += "---\n"
         
     prompt = f"""
     You are an expert product analyst. Analyze the following user feedback threads retrieved for the query: "{query}".
     
-    Your goal is to deeply analyze the evidence, compare different retrieval problems, and identify actionable product opportunity areas.
-    Based ONLY on the provided threads, generate a structured JSON output with THREE keys:
+    CRITICAL INSTRUCTION 1 (RELEVANCE FILTERING): The retrieved threads were pulled via vector search, which means some of them might be irrelevant to the query "{query}". You MUST strictly evaluate each thread and completely IGNORE any thread that does not directly relate to the query. Do not base any insights on irrelevant noise.
+    
+    CRITICAL INSTRUCTION 2 (ACTIONABILITY): Your goal is to deeply analyze the evidence, compare different retrieval problems, and identify highly actionable product opportunity areas based ONLY on the relevant threads. 
+    
+    Generate a structured JSON output with THREE keys:
     1. "retrieval_problems": A list of objects. Each object must have a "title" and "description". Limit to the top 3-4 problems.
-    2. "opportunity_areas": A list of objects. For EVERY retrieval problem, provide a corresponding opportunity area object with a "title" and "description". Do not generate opportunities for minor or edge-case problems.
+    2. "opportunity_areas": A list of objects. For EVERY retrieval problem, provide a corresponding opportunity area object with a "title" and "description". The description MUST propose specific, actionable product features, UI changes, or algorithmic improvements. DO NOT generate vague conceptual statements (e.g., "improve search").
     3. "evidence": A list of objects, each containing a direct "quote" extracted EXACTLY from the text, and the "source_thread_id" (integer) it came from.
     
     Feedback Threads:
