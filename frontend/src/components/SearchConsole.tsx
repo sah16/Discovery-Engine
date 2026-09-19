@@ -167,10 +167,7 @@ export function SearchConsole() {
                 <span className="px-space-sm py-0.5 rounded-full bg-primary/10 text-primary font-label-sm text-label-sm font-medium">
                   #FailureDistribution
                 </span>
-                <div className="flex items-center gap-1 font-label-sm text-label-sm text-error bg-error-container/30 px-space-xs py-0.5 rounded">
-                  <span className="material-symbols-outlined text-[12px]">trending_up</span>
-                  <span>44% Utility / Receipts</span>
-                </div>
+
               </div>
               <h3 className="font-headline-md text-headline-md text-on-surface font-medium leading-snug group-hover:text-primary transition-colors">
                 What kinds of photos do users struggle to retrieve the most?
@@ -194,10 +191,7 @@ export function SearchConsole() {
                 <span className="px-space-sm py-0.5 rounded-full bg-secondary/10 text-secondary font-label-sm text-label-sm font-medium">
                   #MemoryRetention
                 </span>
-                <div className="flex items-center gap-1 font-label-sm text-label-sm text-error bg-error-container/30 px-space-xs py-0.5 rounded">
-                  <span className="material-symbols-outlined text-[12px]">trending_up</span>
-                  <span>86% Forget Dates</span>
-                </div>
+
               </div>
               <h3 className="font-headline-md text-headline-md text-on-surface font-medium leading-snug group-hover:text-secondary transition-colors">
                 What information is forgotten first when looking for old events?
@@ -221,10 +215,7 @@ export function SearchConsole() {
                 <span className="px-space-sm py-0.5 rounded-full bg-tertiary/10 text-tertiary-fixed font-label-sm text-label-sm font-medium">
                   #RootCause
                 </span>
-                <div className="flex items-center gap-1 font-label-sm text-label-sm text-error bg-error-container/30 px-space-xs py-0.5 rounded">
-                  <span className="material-symbols-outlined text-[12px]">trending_up</span>
-                  <span>46% Metadata Mismatch</span>
-                </div>
+
               </div>
               <h3 className="font-headline-md text-headline-md text-on-surface font-medium leading-snug group-hover:text-tertiary-fixed transition-colors">
                 Why do searches fail even when the user knows the photo exists?
