@@ -233,28 +233,7 @@ export function SearchConsole() {
           </div>
         </div>
         
-        <div className="group relative w-full overflow-hidden rounded-2xl p-space-lg bg-surface-container-high hover:bg-surface-bright transition-all duration-300 shadow-2xl flex flex-col sm:flex-row items-center justify-between gap-space-md text-left cursor-pointer" onClick={() => navigate('/insights')}>
-          <div className="absolute -right-20 -bottom-20 w-64 h-64 bg-primary/10 rounded-full blur-3xl group-hover:scale-125 transition-transform duration-500 pointer-events-none"></div>
-          <div className="flex items-center gap-space-md relative z-10">
-            <div className="w-12 h-12 rounded-xl bg-primary-container/20 flex items-center justify-center text-primary shrink-0 group-hover:bg-primary group-hover:text-on-primary transition-colors">
-              <span className="material-symbols-outlined text-[24px]">analytics</span>
-            </div>
-            <div>
-              <div className="font-headline-sm text-headline-sm text-on-surface font-semibold group-hover:text-primary transition-colors">
-                Ready to review aggregated findings? Jump to Insights & Analytics Dashboard →
-              </div>
-              <div className="font-body-sm text-body-sm text-on-surface-variant mt-0.5">
-                Review failure mode distributions, memory retention statistics, and search breakdown categories.
-              </div>
-            </div>
-          </div>
-          <div className="relative z-10 shrink-0">
-            <span className="inline-flex items-center gap-space-xs px-space-md py-space-sm rounded-xl bg-surface-container-highest group-hover:bg-primary group-hover:text-on-primary text-on-surface font-label-md text-label-md transition-all shadow-md">
-              <span>Open Dashboard</span>
-              <span className="material-symbols-outlined text-[16px]">north_east</span>
-            </span>
-          </div>
-        </div>
+
       </section>
     </div>
   );

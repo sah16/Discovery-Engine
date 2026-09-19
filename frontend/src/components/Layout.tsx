@@ -26,12 +26,7 @@ export function Layout() {
         <Outlet />
       </main>
 
-      <footer className="shrink-0 w-full bg-surface-container-lowest border-t border-outline-variant/30 py-space-md mt-auto">
-        <div className="w-full px-margin flex flex-col sm:flex-row items-center justify-between gap-space-sm text-on-surface-variant font-label-sm text-label-sm">
-          <span>Lumina AI Forensic Visual Intelligence Platform • Discovery Engine V2.4</span>
-          <span>Latency: 14ms • Embedding Dim: 8192 • Precision: FP16</span>
-        </div>
-      </footer>
+
     </div>
   );
 }
