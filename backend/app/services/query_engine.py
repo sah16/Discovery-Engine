@@ -61,7 +61,7 @@ async def perform_rag_query(query: str, db: Session, limit: int = 10) -> Dict[st
     metrics = quantify_metrics(formatted_results)
     
     print("[RAG Pipeline] Step 5: Synthesizing qualitative insights via LLM...")
-    synthesis = await synthesize_insights(query, formatted_results)
+    synthesis = await synthesize_insights(query, formatted_results, metrics)
     
     print("[RAG Pipeline] Pipeline complete! Returning response to frontend.\n")
         

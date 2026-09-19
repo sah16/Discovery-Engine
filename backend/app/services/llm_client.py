@@ -103,7 +103,7 @@ def extract_features(text: str) -> dict:
             "forgotten_attributes": []
         }
 
-async def synthesize_insights(query: str, retrieved_context: List[dict]) -> dict:
+async def synthesize_insights(query: str, retrieved_context: List[dict], metrics: dict) -> dict:
     """
     Analyzes the retrieved context to produce structured qualitative insights,
     categorized retrieval problems, and direct supporting quotes using Groq.
@@ -118,15 +118,20 @@ async def synthesize_insights(query: str, retrieved_context: List[dict]) -> dict
         context_str += f"Forgotten Attributes: {r.get('forgotten_attributes', [])}\n"
         context_str += "---\n"
         
+    metrics_str = json.dumps(metrics, indent=2)
+        
     prompt = f"""
     You are an expert product analyst. Analyze the following user feedback threads retrieved for the query: "{query}".
     
+    Here is the quantitative data calculated from this cohort showing the percentage of users who remembered or forgot specific attributes:
+    {metrics_str}
+    
     CRITICAL INSTRUCTION 1 (RELEVANCE FILTERING): The retrieved threads were pulled via vector search, which means some of them might be irrelevant to the query "{query}". You MUST strictly evaluate each thread and completely IGNORE any thread that does not directly relate to the query. Do not base any insights on irrelevant noise.
     
-    CRITICAL INSTRUCTION 2 (ACTIONABILITY): Your goal is to deeply analyze the evidence, compare different retrieval problems, and identify highly actionable product opportunity areas based ONLY on the relevant threads. 
+    CRITICAL INSTRUCTION 2 (ACTIONABILITY & QUANTIFICATION): Your goal is to deeply analyze the evidence, compare different retrieval problems, and identify highly actionable product opportunity areas based ONLY on the relevant threads. You MUST incorporate the quantitative statistics (percentages) provided above into your descriptions of the retrieval problems to ground them in hard data (e.g., 'Users forget exact dates 86% of the time, leading to...'). 
     
     Generate a structured JSON output with THREE keys:
-    1. "retrieval_problems": A list of objects. Each object must have a "title" and "description". Limit to the top 3-4 problems.
+    1. "retrieval_problems": A list of objects. Each object must have a "title" and "description". Limit to the top 3-4 problems. Ensure descriptions include relevant quantitative metrics.
     2. "opportunity_areas": A list of objects. For EVERY retrieval problem, provide a corresponding opportunity area object with a "title" and "description". The description MUST propose specific, actionable product features, UI changes, or algorithmic improvements. DO NOT generate vague conceptual statements (e.g., "improve search").
     3. "evidence": A list of objects, each containing a direct "quote" extracted EXACTLY from the text, and the "source_thread_id" (integer) it came from.
     
