@@ -62,6 +62,16 @@ def perform_rag_query(query: str, db: Session, limit: int = 10) -> Dict[str, Any
     
     print("[RAG Pipeline] Pipeline complete! Returning response to frontend.\n")
         
+    evidence_clean = []
+    for item in synthesis.get("evidence", []):
+        if isinstance(item, str):
+            evidence_clean.append({"quote": item, "source_thread_id": None})
+        elif isinstance(item, dict):
+            evidence_clean.append({
+                "quote": str(item.get("quote", "")),
+                "source_thread_id": item.get("source_thread_id", None)
+            })
+
     return {
         "intent": intent,
         "results": formatted_results,
@@ -69,5 +79,5 @@ def perform_rag_query(query: str, db: Session, limit: int = 10) -> Dict[str, Any
         "retrieval_problems": synthesis.get("retrieval_problems", None),
         "opportunity_areas": synthesis.get("opportunity_areas", None),
         "insights": synthesis.get("insights", None),
-        "evidence": synthesis.get("evidence", [])
+        "evidence": evidence_clean
     }
