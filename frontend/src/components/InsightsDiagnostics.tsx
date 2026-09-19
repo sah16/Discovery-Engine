@@ -54,6 +54,19 @@ export function InsightsDiagnostics() {
       </div>
 
       {/* Main Layout Grid */}
+      {data?.is_out_of_scope ? (
+        <div className="w-full mt-space-md p-space-xl bg-error-container/20 rounded-2xl border border-error/30 flex flex-col items-center justify-center text-center gap-space-sm shadow-lg">
+          <span className="material-symbols-outlined text-[48px] text-error mb-space-xs">gpp_maybe</span>
+          <h2 className="font-headline-lg text-headline-lg text-error font-semibold">Out of Scope Query</h2>
+          <p className="font-body-lg text-body-lg text-on-surface max-w-2xl">
+            This query appears to be unrelated to photo retrieval, product feedback, or software usage. 
+            The AI engine is restricted to analyzing product telemetry and user feedback.
+          </p>
+          <Link className="mt-space-md px-space-lg py-space-sm rounded-xl bg-surface-container-high hover:bg-surface-container-highest text-on-surface font-label-md text-label-md transition-colors border border-outline-variant" to="/">
+            Return to Search Console
+          </Link>
+        </div>
+      ) : (
       <div className="grid grid-cols-1 lg:grid-cols-2 gap-gutter mt-space-md items-start">
         
         {/* Top Left: Retrieval Problems */}
@@ -193,6 +206,7 @@ export function InsightsDiagnostics() {
         </div>
 
       </div>
+      )}
     </div>
   );
 }

@@ -31,6 +31,7 @@ class QueryResponse(BaseModel):
     intent: str
     results: List[RetrievedThread]
     metrics: QuantitativeMetrics
+    is_out_of_scope: Optional[bool] = False
     retrieval_problems: Optional[List[SynthesizedInsight]] = None
     opportunity_areas: Optional[List[SynthesizedInsight]] = None
     insights: Optional[List[SynthesizedInsight]] = None

@@ -27,6 +27,7 @@ export interface QueryResponse {
   intent: string;
   results: RetrievedThread[];
   metrics: QuantitativeMetrics;
+  is_out_of_scope?: boolean;
   retrieval_problems?: SynthesizedInsight[];
   opportunity_areas?: SynthesizedInsight[];
   insights?: SynthesizedInsight[];
