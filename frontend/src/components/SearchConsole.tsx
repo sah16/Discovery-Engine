@@ -184,7 +184,7 @@ export function SearchConsole() {
             </div>
           </div>
 
-          <div className="query-card group rounded-2xl bg-surface-container-low hover:bg-surface-container transition-all duration-300 p-space-lg shadow-xl shadow-black/30 flex flex-col justify-between relative overflow-hidden cursor-pointer" onClick={() => handleCardClick('What information is forgotten first when looking for old events?')}>
+          <div className="query-card group rounded-2xl bg-surface-container-low hover:bg-surface-container transition-all duration-300 p-space-lg shadow-xl shadow-black/30 flex flex-col justify-between relative overflow-hidden cursor-pointer" onClick={() => handleCardClick('What information is forgotten first when looking for old photos?')}>
             <div className="absolute top-0 right-0 w-32 h-32 bg-secondary/5 rounded-full blur-2xl group-hover:bg-secondary/10 transition-all pointer-events-none"></div>
             <div>
               <div className="flex items-center justify-between gap-space-sm mb-space-md">
