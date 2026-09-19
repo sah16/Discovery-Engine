@@ -132,6 +132,8 @@ async def synthesize_insights(query: str, retrieved_context: List[dict], metrics
     
     CRITICAL INSTRUCTION 3 (NO INTERNAL IDENTIFIERS): You MUST NOT mention internal data identifiers like "Thread 24" or "Thread 9" in your titles or descriptions for retrieval_problems or opportunity_areas. The end user does not know what a "Thread" is. Synthesize the findings into general observations about user behavior. (You will only use the source_thread_id in the evidence list, not in the text descriptions).
     
+    CRITICAL INSTRUCTION 4 (OUT OF SCOPE QUERIES): If the user's query (e.g., "{query}") is completely unrelated to photo retrieval, product feedback, or software usage (for example, general knowledge questions, math problems, off-topic chat), you MUST return empty lists `[]` for all three JSON keys. Under no circumstances should you answer out-of-scope questions.
+    
     Generate a structured JSON output with THREE keys:
     1. "retrieval_problems": A list of objects. Each object must have a "title" and "description". Limit to the top 3-4 problems. Ensure descriptions include relevant quantitative metrics.
     2. "opportunity_areas": A list of objects. For EVERY retrieval problem, provide a corresponding opportunity area object with a "title" and "description". The description MUST propose specific, actionable product features, UI changes, or algorithmic improvements. DO NOT generate vague conceptual statements (e.g., "improve search").
