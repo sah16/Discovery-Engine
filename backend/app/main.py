@@ -5,7 +5,8 @@ from app.database import engine, Base
 from app.config import settings
 from app.ingestion.scheduler import start_scheduler, stop_scheduler
 from app.ingestion.pipeline import run_ingestion_pipeline
-from app.ingestion.processor import process_unembedded_records
+from app.ingestion.processor import process_unprocessed_records
+import os
 import app.models
 from sqlalchemy.orm import Session
 from app.database import get_db
@@ -31,9 +32,12 @@ app = FastAPI(
 )
 
 # Configure CORS for frontend access
+frontend_url = os.getenv("FRONTEND_URL")
+origins = [frontend_url] if frontend_url else ["*"]
+
 app.add_middleware(
     CORSMiddleware,
-    allow_origins=["*"],  # Adjust in production
+    allow_origins=origins,
     allow_credentials=True,
     allow_methods=["*"],
     allow_headers=["*"],
@@ -52,7 +56,7 @@ def trigger_ingestion(background_tasks: BackgroundTasks):
 @app.post("/api/process")
 def trigger_processing(background_tasks: BackgroundTasks):
     """Manually trigger the data processing and vectorization pipeline."""
-    background_tasks.add_task(process_unembedded_records)
+    background_tasks.add_task(process_unprocessed_records)
     return {"status": "ok", "message": "Data processing started in the background"}
 
 @app.post("/api/query", response_model=QueryResponse)

@@ -10,16 +10,16 @@ scheduler = BackgroundScheduler()
 
 def start_scheduler():
     if not scheduler.running:
-        # Run the ingestion pipeline every day at midnight
-        scheduler.add_job(
-            run_ingestion_pipeline,
-            trigger=CronTrigger(hour=0, minute=0),
-            id='daily_ingestion_job',
-            name='Daily Data Ingestion',
-            replace_existing=True
-        )
+        # Disabled daily ingestion to save Apify credits
+        # scheduler.add_job(
+        #     run_ingestion_pipeline,
+        #     trigger=CronTrigger(hour=0, minute=0),
+        #     id='daily_ingestion_job',
+        #     name='Daily Data Ingestion',
+        #     replace_existing=True
+        # )
         scheduler.start()
-        logger.info("Background scheduler started. Daily ingestion scheduled at 00:00.")
+        logger.info("Background scheduler started. Daily ingestion is DISABLED to save credits.")
 
 def stop_scheduler():
     if scheduler.running:

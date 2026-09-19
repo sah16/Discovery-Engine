@@ -9,29 +9,24 @@ def quantify_metrics(results: List[Dict[str, Any]]) -> Dict[str, Dict[str, float
     total = len(results)
     if total == 0:
         return {
-            "target_intents": {},
-            "search_strategies": {},
-            "emotions": {}
+            "remembered_attributes": {},
+            "forgotten_attributes": {}
         }
         
-    target_intents = Counter()
-    search_strategies = Counter()
-    emotions = Counter()
+    remembered_attributes = Counter()
+    forgotten_attributes = Counter()
     
     for r in results:
-        t_intent = r.get("target_intent") or "Unknown"
-        s_strategy = r.get("search_strategy") or "Unknown"
-        emotion = r.get("emotion") or "Unknown"
-        
-        target_intents[t_intent] += 1
-        search_strategies[s_strategy] += 1
-        emotions[emotion] += 1
+        for attr in r.get("remembered_attributes", []):
+            remembered_attributes[attr] += 1
+            
+        for attr in r.get("forgotten_attributes", []):
+            forgotten_attributes[attr] += 1
         
     def to_percentages(counter: Counter) -> Dict[str, float]:
-        return {k: round((v / total) * 100, 2) for k, v in counter.items()}
+        return {k: round((v / total) * 100, 2) for k, v in counter.items() if str(k).lower() != "unknown"}
         
     return {
-        "target_intents": to_percentages(target_intents),
-        "search_strategies": to_percentages(search_strategies),
-        "emotions": to_percentages(emotions)
+        "remembered_attributes": to_percentages(remembered_attributes),
+        "forgotten_attributes": to_percentages(forgotten_attributes)
     }

@@ -10,6 +10,9 @@ export function InsightsDiagnostics() {
   const [data, setData] = useState<QueryResponse | null>(initialData || null);
   const [isLoading, setIsLoading] = useState(!initialData);
 
+  const problems = data?.retrieval_problems || data?.insights?.filter(i => !i.title.toLowerCase().includes('opportunity')) || [];
+  const opportunities = data?.opportunity_areas || data?.insights?.filter(i => i.title.toLowerCase().includes('opportunity')) || [];
+
   useEffect(() => {
     if (!initialData) {
       setIsLoading(true);
@@ -19,28 +22,6 @@ export function InsightsDiagnostics() {
         .finally(() => setIsLoading(false));
     }
   }, [query, initialData]);
-
-  // Helper to extract sorted metrics safely
-  const getSortedMetrics = (type: keyof QueryResponse['metrics']) => {
-    if (!data?.metrics?.[type]) return [];
-    return Object.entries(data.metrics[type]).sort((a, b) => b[1] - a[1]);
-  };
-
-  const getTopMetric = (type: keyof QueryResponse['metrics'], index: number, fallback: string) => {
-    const sorted = getSortedMetrics(type);
-    if (index < sorted.length) {
-      return { label: sorted[index][0], value: sorted[index][1], formatted: `${sorted[index][1].toFixed(1)}%` };
-    }
-    return { label: fallback, value: 0, formatted: '0.0%' };
-  };
-
-  const kpi1 = getTopMetric('target_intents', 0, 'Target Intent');
-  const kpi2 = getTopMetric('search_strategies', 0, 'Search Strategy');
-  const kpi3 = getTopMetric('emotions', 0, 'Primary Emotion');
-  const kpi4 = getTopMetric('emotions', 1, 'Secondary Emotion');
-
-  const intentsList = getSortedMetrics('target_intents').slice(0, 4);
-  const strategiesList = getSortedMetrics('search_strategies').slice(0, 4);
 
   return (
     <div className="flex flex-col w-full h-full overflow-y-auto px-margin py-space-lg gap-space-lg relative">
@@ -72,176 +53,149 @@ export function InsightsDiagnostics() {
         </div>
       </div>
 
-      {/* Section 1: Top 4 KPIs */}
-      <div className="shrink-0 grid grid-cols-1 md:grid-cols-2 xl:grid-cols-4 gap-gutter">
-        {/* KPI 1 */}
-        <div className="bg-surface-container p-space-lg rounded-xl shadow-xl flex flex-col justify-between">
-          <div className="flex flex-col gap-space-xs">
-            <span className="font-label-sm text-label-sm text-primary uppercase tracking-wider">Top Target Intent</span>
-            <span className="font-headline-sm text-headline-sm text-on-surface truncate">{kpi1.label}</span>
-            <span className="font-headline-2xl text-headline-2xl font-bold tracking-tight text-on-surface mt-space-xs">
-              {isLoading ? '...' : kpi1.formatted}
-            </span>
-          </div>
-          <div className="mt-space-md pt-space-sm">
-            <div className="w-full bg-surface-container-lowest h-1.5 rounded-full overflow-hidden">
-              <div className="bg-primary h-full rounded-full" style={{ width: kpi1.formatted }}></div>
-            </div>
-          </div>
-        </div>
-        {/* KPI 2 */}
-        <div className="bg-surface-container p-space-lg rounded-xl shadow-xl flex flex-col justify-between">
-          <div className="flex flex-col gap-space-xs">
-            <span className="font-label-sm text-label-sm text-tertiary uppercase tracking-wider">Primary Strategy</span>
-            <span className="font-headline-sm text-headline-sm text-on-surface truncate">{kpi2.label}</span>
-            <span className="font-headline-2xl text-headline-2xl font-bold tracking-tight text-on-surface mt-space-xs">
-              {isLoading ? '...' : kpi2.formatted}
-            </span>
-          </div>
-          <div className="mt-space-md pt-space-sm">
-            <div className="w-full bg-surface-container-lowest h-1.5 rounded-full overflow-hidden">
-              <div className="bg-tertiary h-full rounded-full" style={{ width: kpi2.formatted }}></div>
-            </div>
-          </div>
-        </div>
-        {/* KPI 3 */}
-        <div className="bg-surface-container p-space-lg rounded-xl shadow-xl flex flex-col justify-between">
-          <div className="flex flex-col gap-space-xs">
-            <span className="font-label-sm text-label-sm text-secondary uppercase tracking-wider">Dominant Emotion</span>
-            <span className="font-headline-sm text-headline-sm text-on-surface truncate">{kpi3.label}</span>
-            <span className="font-headline-2xl text-headline-2xl font-bold tracking-tight text-on-surface mt-space-xs">
-              {isLoading ? '...' : kpi3.formatted}
-            </span>
-          </div>
-          <div className="mt-space-md pt-space-sm">
-            <div className="w-full bg-surface-container-lowest h-1.5 rounded-full overflow-hidden">
-              <div className="bg-secondary h-full rounded-full" style={{ width: kpi3.formatted }}></div>
-            </div>
-          </div>
-        </div>
-        {/* KPI 4 */}
-        <div className="bg-surface-container p-space-lg rounded-xl shadow-xl flex flex-col justify-between">
-          <div className="flex flex-col gap-space-xs">
-            <span className="font-label-sm text-label-sm text-outline uppercase tracking-wider">Secondary Emotion</span>
-            <span className="font-headline-sm text-headline-sm text-on-surface truncate">{kpi4.label}</span>
-            <span className="font-headline-2xl text-headline-2xl font-bold tracking-tight text-on-surface mt-space-xs">
-              {isLoading ? '...' : kpi4.formatted}
-            </span>
-          </div>
-          <div className="mt-space-md pt-space-sm">
-            <div className="w-full bg-surface-container-lowest h-1.5 rounded-full overflow-hidden">
-              <div className="bg-surface-bright h-full rounded-full" style={{ width: kpi4.formatted }}></div>
-            </div>
-          </div>
-        </div>
-      </div>
-
-      {/* Section 2: Distribution Metrics */}
-      <div className="grid grid-cols-1 lg:grid-cols-2 gap-gutter">
-        {/* Intents Breakdown */}
-        <div className="bg-surface-container p-space-lg rounded-xl shadow-xl flex flex-col">
-          <h2 className="font-headline-md text-headline-md text-on-surface font-medium mb-space-xs">Failure Distribution by Content Type</h2>
-          <p className="font-body-sm text-body-sm text-on-surface-variant mb-space-lg">What users were attempting to find.</p>
-          
-          <div className="flex flex-col gap-space-md flex-1">
-            {intentsList.length === 0 && !isLoading && (
-              <p className="text-on-surface-variant text-sm">No data available.</p>
-            )}
-            {intentsList.map(([label, value], idx) => (
-              <div key={idx} className="flex flex-col gap-1">
-                <div className="flex items-center justify-between text-on-surface font-body-sm text-body-sm">
-                  <span className="font-label-sm text-label-sm">{label}</span>
-                  <span className="font-label-md text-label-md font-semibold text-primary">{value.toFixed(1)}%</span>
-                </div>
-                <div className="w-full bg-surface-container-lowest h-3 rounded-full overflow-hidden p-0.5">
-                  <div className="bg-primary h-full rounded-full" style={{ width: `${value}%` }}></div>
-                </div>
-              </div>
-            ))}
-          </div>
-        </div>
-
-        {/* Strategies Breakdown */}
-        <div className="bg-surface-container p-space-lg rounded-xl shadow-xl flex flex-col">
-          <h2 className="font-headline-md text-headline-md text-on-surface font-medium mb-space-xs">Breakdown of Search Strategies</h2>
-          <p className="font-body-sm text-body-sm text-on-surface-variant mb-space-lg">How users attempted to find their photos.</p>
-          
-          <div className="flex flex-col gap-space-md flex-1">
-            {strategiesList.length === 0 && !isLoading && (
-              <p className="text-on-surface-variant text-sm">No data available.</p>
-            )}
-            {strategiesList.map(([label, value], idx) => (
-              <div key={idx} className="flex flex-col gap-1">
-                <div className="flex items-center justify-between text-on-surface font-body-sm text-body-sm">
-                  <span className="font-label-sm text-label-sm">{label}</span>
-                  <span className="font-label-md text-label-md font-semibold text-secondary">{value.toFixed(1)}%</span>
-                </div>
-                <div className="w-full bg-surface-container-lowest h-3 rounded-full overflow-hidden p-0.5">
-                  <div className="bg-secondary h-full rounded-full" style={{ width: `${value}%` }}></div>
-                </div>
-              </div>
-            ))}
-          </div>
-        </div>
-      </div>
-
-      {/* Section 3: Split Insights & User Evidence Feed */}
-      <div className="grid grid-cols-1 lg:grid-cols-12 gap-gutter">
-        {/* Left Panel: Executive AI Synthesis (5 cols) */}
-        <div className="lg:col-span-5 bg-surface-container p-space-lg rounded-xl shadow-xl flex flex-col justify-between">
-          <div className="flex flex-col gap-space-md">
-            <h2 className="font-headline-md text-headline-md text-on-surface font-medium flex items-center gap-2">
-              <span className="material-symbols-outlined text-[20px] text-primary">neurology</span>
-              Executive AI Synthesis
+      {/* Metrics Section: Memory & Forgotten Information */}
+      {data?.metrics && (
+        <div className="grid grid-cols-1 lg:grid-cols-2 gap-gutter mt-space-md">
+          {/* View 3 - Memory */}
+          <div className="flex flex-col gap-space-sm">
+            <h2 className="font-headline-md text-headline-md text-on-surface font-medium">
+              View 3 — Memory
             </h2>
-            
-            {data?.insights && data.insights.length > 0 ? (
-              <div className="flex flex-col gap-space-sm mt-space-sm">
-                {data.insights.map((insight, idx) => (
-                  <div key={idx} className="bg-surface-container-lowest p-space-md rounded-xl relative overflow-hidden">
-                    {idx === 0 && <div className="absolute left-0 top-0 bottom-0 w-1 bg-gradient-to-b from-primary via-secondary to-tertiary"></div>}
-                    <h3 className="font-headline-sm text-headline-sm text-on-surface font-semibold mb-2 text-[15px]">
-                      {insight.title}
+            <p className="text-on-surface-variant font-body-md mb-2">What information do people remember?</p>
+            <div className="bg-surface-container p-space-lg rounded-xl flex flex-col gap-3 relative">
+              <button className="absolute top-4 right-4 text-outline hover:text-on-surface transition-colors" title="Copy data">
+                <span className="material-symbols-outlined text-[20px]">content_copy</span>
+              </button>
+              {Object.entries(data.metrics.remembered_attributes || {})
+                .sort((a,b) => b[1] - a[1])
+                .map(([key, value]) => (
+                <div key={key} className="flex justify-start gap-10 items-center">
+                  <span className="text-on-surface-variant font-mono text-sm w-24">{key}</span>
+                  <span className="text-on-surface font-body-sm font-medium">{value}%</span>
+                </div>
+              ))}
+              {Object.keys(data.metrics.remembered_attributes || {}).length === 0 && (
+                <p className="text-on-surface-variant text-sm italic">No data available.</p>
+              )}
+            </div>
+            <div className="flex items-center gap-2 mt-2 border-l-2 border-primary/50 pl-3">
+              <p className="text-on-surface-variant font-body-sm italic">
+                Multiple attributes may be remembered per retrieval episode.
+              </p>
+            </div>
+          </div>
+
+          {/* View 4 - Forgotten information */}
+          <div className="flex flex-col gap-space-sm">
+            <h2 className="font-headline-md text-headline-md text-on-surface font-medium">
+              View 4 — Forgotten information
+            </h2>
+            <div className="bg-surface-container p-space-lg rounded-xl flex flex-col gap-3 mt-9 relative">
+              <button className="absolute top-4 right-4 text-outline hover:text-on-surface transition-colors" title="Copy data">
+                <span className="material-symbols-outlined text-[20px]">content_copy</span>
+              </button>
+              {Object.entries(data.metrics.forgotten_attributes || {})
+                .sort((a,b) => b[1] - a[1])
+                .map(([key, value]) => (
+                <div key={key} className="flex justify-start gap-10 items-center">
+                  <span className="text-on-surface-variant font-mono text-sm w-32">{key}</span>
+                  <span className="text-on-surface font-body-sm font-medium">{value}%</span>
+                </div>
+              ))}
+              {Object.keys(data.metrics.forgotten_attributes || {}).length === 0 && (
+                <p className="text-on-surface-variant text-sm italic">No data available.</p>
+              )}
+            </div>
+          </div>
+        </div>
+      )}
+
+      {/* Section 3: Synthesis & Evidence */}
+      <div className="grid grid-cols-1 lg:grid-cols-12 gap-gutter mt-space-md">
+        {/* Left Panel: Problems vs Opportunities */}
+        <div className="lg:col-span-7 flex flex-col gap-space-lg">
+          
+          {/* Retrieval Problems */}
+          <div className="bg-surface-container p-space-lg rounded-xl shadow-xl border-l-4 border-error/70 flex flex-col gap-space-md">
+            <h2 className="font-headline-md text-headline-md text-error font-medium flex items-center gap-2">
+              <span className="material-symbols-outlined text-[20px]">warning</span>
+              Identified Retrieval Problems
+            </h2>
+            <div className="flex flex-col gap-space-sm">
+              {problems.length ? (
+                problems.map((insight, idx) => (
+                  <div key={`prob-${idx}`} className="bg-error/5 p-space-md rounded-lg border border-error/10 hover:border-error/30 transition-colors">
+                    <h3 className="font-headline-sm text-headline-sm text-on-surface font-semibold mb-1">
+                      {insight.title.replace(/retrieval problem:\s*/i, '').trim()}
                     </h3>
                     <p className="font-body-sm text-body-sm text-on-surface-variant leading-relaxed">
                       {insight.description}
                     </p>
                   </div>
-                ))}
+                ))
+              ) : (
+                <p className="text-on-surface-variant text-sm italic">{isLoading ? 'Analyzing...' : 'No problems identified.'}</p>
+              )}
+            </div>
+          </div>
+
+          {/* Opportunity Areas */}
+          <div className="bg-surface-container p-space-lg rounded-xl shadow-xl border-l-4 border-primary/70 flex flex-col gap-space-md">
+            <h2 className="font-headline-md text-headline-md text-primary font-medium flex items-center gap-2">
+              <span className="material-symbols-outlined text-[20px]">lightbulb</span>
+              Opportunity Areas
+            </h2>
+            <div className="flex flex-col gap-space-sm">
+              {opportunities.length ? (
+                opportunities.map((insight, idx) => (
+                  <div key={`opp-${idx}`} className="bg-primary/5 p-space-md rounded-lg border border-primary/10 hover:border-primary/30 transition-colors">
+                    <h3 className="font-headline-sm text-headline-sm text-on-surface font-semibold mb-1">
+                      {insight.title.replace(/opportunity area:\s*/i, '').trim()}
+                    </h3>
+                    <p className="font-body-sm text-body-sm text-on-surface-variant leading-relaxed">
+                      {insight.description}
+                    </p>
+                  </div>
+                ))
+              ) : (
+                <p className="text-on-surface-variant text-sm italic">{isLoading ? 'Analyzing...' : 'No opportunities identified.'}</p>
+              )}
+            </div>
+          </div>
+
+        </div>
+
+        {/* Right Panel: Voice of the User */}
+        <div className="lg:col-span-5 bg-surface-container p-space-lg rounded-xl shadow-xl flex flex-col">
+          <div className="flex flex-col gap-space-md mb-space-md">
+            <div>
+              <h2 className="font-headline-md text-headline-md text-on-surface font-medium flex items-center gap-2">
+                <span className="material-symbols-outlined text-[20px] text-tertiary">record_voice_over</span>
+                Voice of the User
+              </h2>
+              <p className="font-body-sm text-body-sm text-on-surface-variant mt-1">
+                Direct evidence extracted from public platforms to support the synthesis.
+              </p>
+            </div>
+          </div>
+          
+          <div className="flex flex-col gap-space-md overflow-y-auto pr-2 custom-scrollbar flex-1 max-h-[600px]">
+            {data?.evidence?.length ? data.evidence.map((item, idx) => (
+              <div key={idx} className="bg-surface-container-lowest p-space-md rounded-xl shadow-sm border border-outline-variant hover:shadow-md transition-shadow relative">
+                <div className="absolute top-2 left-2 text-tertiary/20">
+                  <span className="material-symbols-outlined text-3xl">format_quote</span>
+                </div>
+                <p className="font-body-md text-body-md text-on-surface italic pl-6 relative z-10 leading-relaxed">
+                  “{typeof item === 'string' ? item : item.quote}”
+                </p>
               </div>
-            ) : (
-              <div className="bg-surface-container-lowest p-space-md rounded-xl">
+            )) : (
+              <div className="bg-surface-container-lowest p-space-md rounded-xl text-center py-10">
                 <p className="font-body-sm text-body-sm text-on-surface-variant leading-relaxed">
-                  {isLoading ? 'Synthesizing insights from retrieval database...' : 'No insights found.'}
+                  {isLoading ? 'Retrieving user evidence...' : 'No user quotes extracted for this query.'}
                 </p>
               </div>
             )}
-          </div>
-        </div>
-
-        {/* Right Panel: Voice of the User Feed (7 cols) */}
-        <div className="lg:col-span-7 bg-surface-container p-space-lg rounded-xl shadow-xl flex flex-col justify-between">
-          <div className="flex flex-col gap-space-md">
-            <div>
-              <h2 className="font-headline-md text-headline-md text-on-surface font-medium">Voice of the User: Extracted Evidence</h2>
-              <p className="font-body-sm text-body-sm text-on-surface-variant">Real-time verbatim friction captures from public platforms.</p>
-            </div>
-            
-            <div className="flex flex-col gap-space-md">
-              {data?.evidence?.length ? data.evidence.map((item, idx) => (
-                <div key={idx} className="bg-surface-container-lowest p-space-md rounded-xl shadow-md flex flex-col gap-space-xs">
-                  <p className="font-body-md text-body-md text-on-surface-variant italic pl-space-md border-l-2 border-primary/60">
-                    “{item.quote}”
-                  </p>
-                </div>
-              )) : (
-                <div className="bg-surface-container-lowest p-space-md rounded-xl">
-                  <p className="font-body-sm text-body-sm text-on-surface-variant leading-relaxed">
-                    {isLoading ? 'Retrieving user evidence...' : 'No user quotes extracted for this query.'}
-                  </p>
-                </div>
-              )}
-            </div>
           </div>
         </div>
       </div>

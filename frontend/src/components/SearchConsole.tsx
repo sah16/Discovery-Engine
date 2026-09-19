@@ -7,13 +7,13 @@ export function SearchConsole() {
   const [isAnalyzing, setIsAnalyzing] = useState(false);
   const navigate = useNavigate();
 
-  const handleSearch = async () => {
-    if (query.trim() && !isAnalyzing) {
+  const handleSearchWithQuery = async (searchQuery: string) => {
+    if (searchQuery.trim() && !isAnalyzing) {
       setIsAnalyzing(true);
       try {
-        const responseData = await analyzeQuery(query);
+        const responseData = await analyzeQuery(searchQuery);
         // Navigate to insights page with query and data in state
-        navigate('/insights', { state: { query, data: responseData } });
+        navigate('/insights', { state: { query: searchQuery, data: responseData } });
       } catch (e) {
         console.error(e);
       } finally {
@@ -22,8 +22,15 @@ export function SearchConsole() {
     }
   };
 
+  const handleSearch = () => handleSearchWithQuery(query);
+
   const handleQuickPill = (text: string) => {
-    setQuery(`Investigate failure clusters in ${text.toLowerCase()} retrieval queries`);
+    setQuery(text);
+  };
+
+  const handleCardClick = (searchQuery: string) => {
+    setQuery(searchQuery);
+    handleSearchWithQuery(searchQuery);
   };
 
   return (
@@ -34,19 +41,13 @@ export function SearchConsole() {
         <div className="absolute top-52 right-1/4 w-[340px] h-[240px] bg-tertiary-container/10 rounded-full blur-[90px] pointer-events-none"></div>
         
         <div className="relative z-10 w-full max-w-5xl flex flex-col items-center text-center mt-12">
-          <div className="inline-flex items-center gap-space-xs px-space-md py-1.5 rounded-full bg-surface-container-high/80 backdrop-blur-xl shadow-lg shadow-black/40 mb-space-lg">
-            <span className="w-2 h-2 rounded-full bg-primary animate-ping"></span>
-            <span className="font-label-sm text-label-sm text-primary font-semibold tracking-wider uppercase">SEMANTIC SYNTHESIS CONSOLE</span>
-            <span className="w-1 h-1 rounded-full bg-outline-variant"></span>
-            <span className="font-label-sm text-label-sm text-on-surface-variant font-medium">NEURAL PROBE ACTIVE</span>
-          </div>
-          
+
           <h1 className="font-headline-2xl text-headline-2xl text-on-surface tracking-tight max-w-4xl mx-auto leading-tight">
             Analyze Photo Retrieval <span className="bg-gradient-to-r from-primary via-secondary to-tertiary-fixed bg-clip-text text-transparent">Failure Modes</span>
           </h1>
           
           <p className="font-body-lg text-body-lg text-on-surface-variant max-w-2xl mt-space-md mb-space-xl">
-            Investigate multi-modal semantic drift, EXIF amnesia, and query drop-off across millions of retrieval attempts.
+            Uncover how people remember old visual information and where existing retrieval experiences break down.
           </p>
           
           <div className="w-full relative group">
@@ -103,43 +104,43 @@ export function SearchConsole() {
           <div className="w-full flex flex-wrap items-center justify-center gap-space-sm mt-space-lg">
             <span className="font-label-sm text-label-sm text-outline uppercase tracking-wider mr-space-xs">Quick Seed Prompts:</span>
             
-            <button onClick={() => handleQuickPill('Travel & Landmarks')} className="quick-pill rounded-full px-space-md py-1.5 bg-surface-container hover:bg-surface-container-high text-primary font-label-md text-label-md transition-all duration-150 flex items-center gap-space-xs group shadow-sm" type="button">
-              <span className="material-symbols-outlined text-[14px] text-primary group-hover:rotate-12 transition-transform">flight_takeoff</span>
-              <span>Travel & Landmarks</span>
+            <button onClick={() => handleQuickPill('What do users do when search fails them?')} className="quick-pill rounded-full px-space-md py-1.5 bg-surface-container hover:bg-surface-container-high text-primary font-label-md text-label-md transition-all duration-150 flex items-center gap-space-xs group shadow-sm" type="button">
+              <span className="material-symbols-outlined text-[14px] text-primary group-hover:rotate-12 transition-transform">alt_route</span>
+              <span>User Workarounds</span>
             </button>
-            <button onClick={() => handleQuickPill('Receipts & Text')} className="quick-pill rounded-full px-space-md py-1.5 bg-surface-container hover:bg-surface-container-high text-secondary font-label-md text-label-md transition-all duration-150 flex items-center gap-space-xs group shadow-sm" type="button">
-              <span className="material-symbols-outlined text-[14px] text-secondary group-hover:rotate-12 transition-transform">receipt_long</span>
-              <span>Receipts & Text</span>
+            <button onClick={() => handleQuickPill('Do users recall dates, visual objects, or emotions more reliably?')} className="quick-pill rounded-full px-space-md py-1.5 bg-surface-container hover:bg-surface-container-high text-secondary font-label-md text-label-md transition-all duration-150 flex items-center gap-space-xs group shadow-sm" type="button">
+              <span className="material-symbols-outlined text-[14px] text-secondary group-hover:rotate-12 transition-transform">psychology</span>
+              <span>Memory Reliability</span>
             </button>
-            <button onClick={() => handleQuickPill('People & Pets')} className="quick-pill rounded-full px-space-md py-1.5 bg-surface-container hover:bg-surface-container-high text-tertiary-fixed font-label-md text-label-md transition-all duration-150 flex items-center gap-space-xs group shadow-sm" type="button">
-              <span className="material-symbols-outlined text-[14px] text-tertiary-fixed group-hover:rotate-12 transition-transform">pets</span>
-              <span>People & Pets</span>
+            <button onClick={() => handleQuickPill('How do users formulate searches when their memory is incomplete?')} className="quick-pill rounded-full px-space-md py-1.5 bg-surface-container hover:bg-surface-container-high text-tertiary-fixed font-label-md text-label-md transition-all duration-150 flex items-center gap-space-xs group shadow-sm" type="button">
+              <span className="material-symbols-outlined text-[14px] text-tertiary-fixed group-hover:rotate-12 transition-transform">manage_search</span>
+              <span>Search Formulation</span>
             </button>
-            <button onClick={() => handleQuickPill('Vague Time Anchors')} className="quick-pill rounded-full px-space-md py-1.5 bg-surface-container hover:bg-surface-container-high text-on-surface-variant hover:text-on-surface font-label-md text-label-md transition-all duration-150 flex items-center gap-space-xs group shadow-sm" type="button">
-              <span className="material-symbols-outlined text-[14px] text-outline group-hover:text-primary transition-colors">calendar_month</span>
-              <span>Vague Time Anchors</span>
+            <button onClick={() => handleQuickPill('Where does the existing Google Photos search experience break down for users?')} className="quick-pill rounded-full px-space-md py-1.5 bg-surface-container hover:bg-surface-container-high text-on-surface-variant hover:text-on-surface font-label-md text-label-md transition-all duration-150 flex items-center gap-space-xs group shadow-sm" type="button">
+              <span className="material-symbols-outlined text-[14px] text-outline group-hover:text-primary transition-colors">report_problem</span>
+              <span>Search Breakdowns</span>
             </button>
           </div>
           
           <div className="w-full mt-space-xl p-space-sm rounded-xl bg-surface-container-lowest/80 backdrop-blur-md shadow-inner flex flex-wrap items-center justify-center gap-x-space-md gap-y-space-xs text-on-surface-variant font-label-sm text-label-sm">
             <div className="flex items-center gap-space-xs">
               <span className="material-symbols-outlined text-[14px] text-primary">hub</span>
-              <span>Indexed 3 feedback streams (App Store, Zendesk, In-App Logs)</span>
+              <span>Indexed Public Discourse (App Stores, Reddit, Forums, YouTube)</span>
             </div>
             <span className="text-outline-variant hidden sm:inline">•</span>
             <div className="flex items-center gap-space-xs">
               <span className="w-1.5 h-1.5 rounded-full bg-primary animate-pulse"></span>
-              <span>Semantic clustering: Active</span>
+              <span>Vector DB: Supabase pgvector</span>
             </div>
             <span className="text-outline-variant hidden sm:inline">•</span>
             <div className="flex items-center gap-space-xs">
               <span className="material-symbols-outlined text-[14px] text-secondary">memory</span>
-              <span>Model: OmniVision-Embed-70B</span>
+              <span>LLM: openai/gpt-oss-120b</span>
             </div>
             <span className="text-outline-variant hidden sm:inline">•</span>
             <div className="flex items-center gap-space-xs">
-              <span className="material-symbols-outlined text-[14px] text-tertiary">verified</span>
-              <span className="text-on-surface font-medium">Confidence: 94.8%</span>
+              <span className="material-symbols-outlined text-[14px] text-tertiary">data_object</span>
+              <span className="text-on-surface font-medium">Embeddings: all-MiniLM-L6-v2</span>
             </div>
           </div>
         </div>
@@ -159,27 +160,26 @@ export function SearchConsole() {
         </div>
         
         <div className="grid grid-cols-1 md:grid-cols-3 gap-gutter">
-          <div className="query-card group rounded-2xl bg-surface-container-low hover:bg-surface-container transition-all duration-300 p-space-lg shadow-xl shadow-black/30 flex flex-col justify-between relative overflow-hidden cursor-pointer" onClick={() => handleQuickPill('UtilityPhotos')}>
+          <div className="query-card group rounded-2xl bg-surface-container-low hover:bg-surface-container transition-all duration-300 p-space-lg shadow-xl shadow-black/30 flex flex-col justify-between relative overflow-hidden cursor-pointer" onClick={() => handleCardClick('What kinds of photos do users struggle to retrieve the most?')}>
             <div className="absolute top-0 right-0 w-32 h-32 bg-primary/5 rounded-full blur-2xl group-hover:bg-primary/10 transition-all pointer-events-none"></div>
             <div>
               <div className="flex items-center justify-between gap-space-sm mb-space-md">
                 <span className="px-space-sm py-0.5 rounded-full bg-primary/10 text-primary font-label-sm text-label-sm font-medium">
-                  #UtilityPhotos
+                  #FailureDistribution
                 </span>
                 <div className="flex items-center gap-1 font-label-sm text-label-sm text-error bg-error-container/30 px-space-xs py-0.5 rounded">
                   <span className="material-symbols-outlined text-[12px]">trending_up</span>
-                  <span>44.1% rage quits</span>
+                  <span>44% Utility / Receipts</span>
                 </div>
               </div>
               <h3 className="font-headline-md text-headline-md text-on-surface font-medium leading-snug group-hover:text-primary transition-colors">
-                Why do users fail when looking for parking stubs & receipts?
+                What kinds of photos do users struggle to retrieve the most?
               </h3>
               <p className="font-body-md text-body-md text-on-surface-variant mt-space-sm">
-                Semantic drift occurs when users search for transactional text using visual descriptors instead of numeric tokens.
+                Analysis shows a high failure rate for utility documents, prescriptions, and receipts versus milestone events.
               </p>
             </div>
-            <div className="mt-space-lg pt-space-md flex items-center justify-between">
-              <span className="font-label-sm text-label-sm text-outline">12,410 sample logs</span>
+            <div className="mt-space-lg pt-space-md flex items-center justify-end">
               <button className="inline-flex items-center gap-space-xs font-label-md text-label-md text-primary group-hover:translate-x-1 transition-transform" type="button">
                 <span>View Query Insights</span>
                 <span className="material-symbols-outlined text-[16px]">arrow_forward</span>
@@ -187,27 +187,26 @@ export function SearchConsole() {
             </div>
           </div>
           
-          <div className="query-card group rounded-2xl bg-surface-container-low hover:bg-surface-container transition-all duration-300 p-space-lg shadow-xl shadow-black/30 flex flex-col justify-between relative overflow-hidden cursor-pointer" onClick={() => handleQuickPill('TemporalAmnesia')}>
+          <div className="query-card group rounded-2xl bg-surface-container-low hover:bg-surface-container transition-all duration-300 p-space-lg shadow-xl shadow-black/30 flex flex-col justify-between relative overflow-hidden cursor-pointer" onClick={() => handleCardClick('What information is forgotten first when looking for old events?')}>
             <div className="absolute top-0 right-0 w-32 h-32 bg-secondary/5 rounded-full blur-2xl group-hover:bg-secondary/10 transition-all pointer-events-none"></div>
             <div>
               <div className="flex items-center justify-between gap-space-sm mb-space-md">
                 <span className="px-space-sm py-0.5 rounded-full bg-secondary/10 text-secondary font-label-sm text-label-sm font-medium">
-                  #TemporalAmnesia
+                  #MemoryRetention
                 </span>
                 <div className="flex items-center gap-1 font-label-sm text-label-sm text-error bg-error-container/30 px-space-xs py-0.5 rounded">
                   <span className="material-symbols-outlined text-[12px]">trending_up</span>
-                  <span>86.4% gap</span>
+                  <span>86% Forget Dates</span>
                 </div>
               </div>
               <h3 className="font-headline-md text-headline-md text-on-surface font-medium leading-snug group-hover:text-secondary transition-colors">
-                How does seasonal recall conflict with standard EXIF calendar pickers?
+                What information is forgotten first when looking for old events?
               </h3>
               <p className="font-body-md text-body-md text-on-surface-variant mt-space-sm">
-                Users recall qualitative atmospheric states ("late autumn rain") rather than mechanical calendar timestamps.
+                Users retain visual cues and people reliably, but exact dates and locations are forgotten 86% of the time.
               </p>
             </div>
-            <div className="mt-space-lg pt-space-md flex items-center justify-between">
-              <span className="font-label-sm text-label-sm text-outline">8,924 sample logs</span>
+            <div className="mt-space-lg pt-space-md flex items-center justify-end">
               <button className="inline-flex items-center gap-space-xs font-label-md text-label-md text-secondary group-hover:translate-x-1 transition-transform" type="button">
                 <span>View Query Insights</span>
                 <span className="material-symbols-outlined text-[16px]">arrow_forward</span>
@@ -215,27 +214,26 @@ export function SearchConsole() {
             </div>
           </div>
           
-          <div className="query-card group rounded-2xl bg-surface-container-low hover:bg-surface-container transition-all duration-300 p-space-lg shadow-xl shadow-black/30 flex flex-col justify-between relative overflow-hidden cursor-pointer" onClick={() => handleQuickPill('SemanticVoid')}>
+          <div className="query-card group rounded-2xl bg-surface-container-low hover:bg-surface-container transition-all duration-300 p-space-lg shadow-xl shadow-black/30 flex flex-col justify-between relative overflow-hidden cursor-pointer" onClick={() => handleCardClick('Why do searches fail even when the user knows the photo exists?')}>
             <div className="absolute top-0 right-0 w-32 h-32 bg-tertiary-container/5 rounded-full blur-2xl group-hover:bg-tertiary-container/10 transition-all pointer-events-none"></div>
             <div>
               <div className="flex items-center justify-between gap-space-sm mb-space-md">
                 <span className="px-space-sm py-0.5 rounded-full bg-tertiary/10 text-tertiary-fixed font-label-sm text-label-sm font-medium">
-                  #SemanticVoid
+                  #RootCause
                 </span>
                 <div className="flex items-center gap-1 font-label-sm text-label-sm text-error bg-error-container/30 px-space-xs py-0.5 rounded">
                   <span className="material-symbols-outlined text-[12px]">trending_up</span>
-                  <span>62.8% drop</span>
+                  <span>46% Metadata Mismatch</span>
                 </div>
               </div>
               <h3 className="font-headline-md text-headline-md text-on-surface font-medium leading-snug group-hover:text-tertiary-fixed transition-colors">
-                What happens when users search with single-noun emotional queries like "cozy"?
+                Why do searches fail even when the user knows the photo exists?
               </h3>
               <p className="font-body-md text-body-md text-on-surface-variant mt-space-sm">
-                Zero-shot classifiers over-index on fireplaces, missing warm human interior scenes and domestic ambient lighting.
+                The majority of search drop-offs are caused by metadata mismatch and vague semantic recognition failures.
               </p>
             </div>
-            <div className="mt-space-lg pt-space-md flex items-center justify-between">
-              <span className="font-label-sm text-label-sm text-outline">15,190 sample logs</span>
+            <div className="mt-space-lg pt-space-md flex items-center justify-end">
               <button className="inline-flex items-center gap-space-xs font-label-md text-label-md text-tertiary-fixed group-hover:translate-x-1 transition-transform" type="button">
                 <span>View Query Insights</span>
                 <span className="material-symbols-outlined text-[16px]">arrow_forward</span>
@@ -244,7 +242,7 @@ export function SearchConsole() {
           </div>
         </div>
         
-        <div className="group relative w-full overflow-hidden rounded-2xl p-space-lg bg-surface-container-high hover:bg-surface-bright transition-all duration-300 shadow-2xl flex flex-col sm:flex-row items-center justify-between gap-space-md text-left cursor-pointer" onClick={handleSearch}>
+        <div className="group relative w-full overflow-hidden rounded-2xl p-space-lg bg-surface-container-high hover:bg-surface-bright transition-all duration-300 shadow-2xl flex flex-col sm:flex-row items-center justify-between gap-space-md text-left cursor-pointer" onClick={() => navigate('/insights')}>
           <div className="absolute -right-20 -bottom-20 w-64 h-64 bg-primary/10 rounded-full blur-3xl group-hover:scale-125 transition-transform duration-500 pointer-events-none"></div>
           <div className="flex items-center gap-space-md relative z-10">
             <div className="w-12 h-12 rounded-xl bg-primary-container/20 flex items-center justify-center text-primary shrink-0 group-hover:bg-primary group-hover:text-on-primary transition-colors">
@@ -255,7 +253,7 @@ export function SearchConsole() {
                 Ready to review aggregated findings? Jump to Insights & Analytics Dashboard →
               </div>
               <div className="font-body-sm text-body-sm text-on-surface-variant mt-0.5">
-                Cross-cluster affinity matrices, failure category frequencies, and vector dispersion metrics.
+                Review failure mode distributions, memory retention statistics, and search breakdown categories.
               </div>
             </div>
           </div>

@@ -47,7 +47,7 @@ def infer_intent(query: str) -> str:
                     "content": prompt,
                 }
             ],
-            model="openai/gpt-oss-120b",
+            model="llama-3.1-8b-instant",
             response_format={"type": "json_object"},
             temperature=0.0
         )
@@ -71,9 +71,8 @@ def extract_features(text: str) -> dict:
     prompt = f"""
     Analyze the following user feedback about a photo retrieval experience.
     Extract the following information and format it as a JSON object:
-    - target_intent: What specific photo or memory the user was looking for (e.g., receipt, dog, vacation).
-    - search_strategy: How they attempted to find it (e.g., scrolling, keyword guess).
-    - emotion: The user's sentiment or frustration level.
+    - remembered_attributes: A list of strings identifying what the user recalled. Choose from: ["Event", "People", "Approx time", "Location", "Object"]. (Can be empty).
+    - forgotten_attributes: A list of strings identifying what the user explicitly forgot. Choose from: ["Exact date", "Exact location", "Person name", "Event name"]. (Can be empty).
 
     Feedback text:
     "{text}"
@@ -90,7 +89,7 @@ def extract_features(text: str) -> dict:
                     "content": prompt,
                 }
             ],
-            model="openai/gpt-oss-120b",
+            model="llama-3.1-8b-instant",
             response_format={"type": "json_object"},
             temperature=0.0
         )
@@ -99,9 +98,8 @@ def extract_features(text: str) -> dict:
     except Exception as e:
         print(f"Error during feature extraction: {e}")
         return {
-            "target_intent": None,
-            "search_strategy": None,
-            "emotion": None
+            "remembered_attributes": [],
+            "forgotten_attributes": []
         }
 
 def synthesize_insights(query: str, retrieved_context: List[dict]) -> dict:
@@ -142,7 +140,7 @@ def synthesize_insights(query: str, retrieved_context: List[dict]) -> dict:
                     "content": prompt,
                 }
             ],
-            model="openai/gpt-oss-120b",
+            model="llama-3.1-8b-instant",
             response_format={"type": "json_object"},
             temperature=0.0
         )

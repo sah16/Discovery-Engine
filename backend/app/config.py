@@ -6,15 +6,14 @@ class Settings(BaseSettings):
     GROQ_API_KEY: str = ""
     EMBEDDING_MODEL_NAME: str = "all-MiniLM-L6-v2"
     
-    # Reddit variables
-    REDDIT_CLIENT_ID: str = ""
-    REDDIT_CLIENT_SECRET: str = ""
-    REDDIT_USER_AGENT: str = ""
+    # Apify variables
+    APIFY_API_TOKEN: str = ""
 
     # YouTube variables
     YOUTUBE_API_KEY: str = ""
 
     class Config:
         env_file = ".env"
+        extra = "ignore"
 
 settings = Settings()

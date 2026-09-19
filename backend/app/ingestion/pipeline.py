@@ -17,10 +17,11 @@ def run_ingestion_pipeline():
     
     raw_data = []
     
-    # 1. Scrape Reddit
+    # 1. Scrape Reddit - DISABLED TO PROTECT APIFY CREDITS
     try:
-        logger.info("Fetching Reddit threads...")
-        reddit_data = fetch_reddit_threads(limit=20)
+        logger.info("Reddit scraping is currently disabled to save credits.")
+        reddit_data = []
+        # reddit_data = fetch_reddit_threads(limit=10) # Using a small limit to save credits
         raw_data.extend(reddit_data)
     except Exception as e:
         logger.error(f"Failed to fetch Reddit data: {e}")
@@ -46,17 +47,14 @@ def run_ingestion_pipeline():
     # Save to database
     db = SessionLocal()
     try:
-        new_records = 0
+        records = []
         for item in raw_data:
-            # Basic deduplication strategy based on raw_text
-            exists = db.query(FeedbackRecord).filter(FeedbackRecord.raw_text == item['raw_text']).first()
-            if not exists:
-                record = FeedbackRecord(
-                    source=item['source'],
-                    raw_text=item['raw_text']
-                )
-                db.add(record)
-                new_records += 1
+            records.append(FeedbackRecord(
+                source=item['source'],
+                raw_text=item['raw_text']
+            ))
+        db.bulk_save_objects(records)
+        new_records = len(records)
         
         db.commit()
         logger.info(f"Successfully inserted {new_records} new records into the database.")
