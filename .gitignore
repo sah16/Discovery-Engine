@@ -58,3 +58,6 @@ backend/demo*.py
 backend/*_output.txt
 backend/output.json
 
+# Data Import Files
+backend/import_csv.py
+backend/*.csv
