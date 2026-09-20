@@ -4,7 +4,7 @@ import { analyzeQuery, type QueryResponse } from '../api';
 
 export function InsightsDiagnostics() {
   const location = useLocation();
-  const query = location.state?.query || 'What do people actually remember about old travel photos?';
+  const query = location.state?.query || 'What information do people actually remember about a photo?';
   const initialData = location.state?.data as QueryResponse | undefined;
 
   const [data, setData] = useState<QueryResponse | null>(initialData || null);

@@ -29,6 +29,7 @@ Design and implement an **AI-Powered Discovery Engine** that:
 
 3. **User Input & Intent Inference (Frontend)**
    - Accept flexible, natural-language prompts, topics, or direct questions from internal users. The engine must classify the query into one of several primary inquiry types and infer the specific data insight required:
+   - **Guardrails**: Implement strict filtering to identify out-of-scope queries and present explicit UI warnings when a query falls outside the domain of vague photo retrieval.
      - **Cognitive Memory & Recall Inquiries:**
        - *"What do people actually remember about old travel photos?"*
        - *"Do users recall dates, visual objects, or emotions more reliably?"*
@@ -55,6 +56,7 @@ Design and implement an **AI-Powered Discovery Engine** that:
 
 5. **Discovery, Analysis & Quantification Engine**
    - Move beyond simple sentiment analysis by categorizing user narratives into structured behavioral dimensions.
+   - Inject quantitative telemetry metrics directly into the LLM prompt to ensure insights are strongly data-grounded.
    - Aggregate and quantify evidence to compute proportional metrics like:
      - **Failure Distribution by Content Type:** (e.g., Utility/Prescriptions/Receipts: 44%, Casual Outings/Cafés: 32%, Milestone Events: 24%)
      - **Memory Retention vs. Forgetting:** (e.g., Sensory/Visual Cues Retained: 68%, People/Companions Retained: 54%, Exact Dates/Locations Forgotten: 86%)

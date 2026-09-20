@@ -60,7 +60,7 @@ export function SearchConsole() {
               <div className="relative flex-1 w-full">
                 <input
                   className="w-full bg-transparent px-space-sm py-space-md text-on-surface font-headline-sm text-headline-sm focus:outline-none placeholder:text-outline placeholder:font-body-md"
-                  placeholder="What do people actually remember about old travel photos?"
+                  placeholder="What information do people actually remember about a photo?"
                   type="text"
                   value={query}
                   onChange={(e) => setQuery(e.target.value)}
@@ -104,11 +104,11 @@ export function SearchConsole() {
           <div className="w-full flex flex-wrap items-center justify-center gap-space-sm mt-space-lg">
             <span className="font-label-sm text-label-sm text-outline uppercase tracking-wider mr-space-xs">Quick Seed Prompts:</span>
 
-            <button onClick={() => handleQuickPill('What do users do when search fails them?')} className="quick-pill rounded-full px-space-md py-1.5 bg-surface-container hover:bg-surface-container-high text-primary font-label-md text-label-md transition-all duration-150 flex items-center gap-space-xs group shadow-sm" type="button">
-              <span className="material-symbols-outlined text-[14px] text-primary group-hover:rotate-12 transition-transform">alt_route</span>
-              <span>User Workarounds</span>
+            <button onClick={() => handleQuickPill('What kinds of old photos do users struggle to retrieve?')} className="quick-pill rounded-full px-space-md py-1.5 bg-surface-container hover:bg-surface-container-high text-primary font-label-md text-label-md transition-all duration-150 flex items-center gap-space-xs group shadow-sm" type="button">
+              <span className="material-symbols-outlined text-[14px] text-primary group-hover:rotate-12 transition-transform">photo_library</span>
+              <span>Retrieval Struggles</span>
             </button>
-            <button onClick={() => handleQuickPill('Do users recall dates, visual objects, or emotions more reliably?')} className="quick-pill rounded-full px-space-md py-1.5 bg-surface-container hover:bg-surface-container-high text-secondary font-label-md text-label-md transition-all duration-150 flex items-center gap-space-xs group shadow-sm" type="button">
+            <button onClick={() => handleQuickPill('What information do people actually remember about a photo?')} className="quick-pill rounded-full px-space-md py-1.5 bg-surface-container hover:bg-surface-container-high text-secondary font-label-md text-label-md transition-all duration-150 flex items-center gap-space-xs group shadow-sm" type="button">
               <span className="material-symbols-outlined text-[14px] text-secondary group-hover:rotate-12 transition-transform">psychology</span>
               <span>Memory Reliability</span>
             </button>
@@ -116,7 +116,7 @@ export function SearchConsole() {
               <span className="material-symbols-outlined text-[14px] text-tertiary-fixed group-hover:rotate-12 transition-transform">manage_search</span>
               <span>Search Formulation</span>
             </button>
-            <button onClick={() => handleQuickPill('Where does the existing Google Photos search experience break down for users?')} className="quick-pill rounded-full px-space-md py-1.5 bg-surface-container hover:bg-surface-container-high text-on-surface-variant hover:text-on-surface font-label-md text-label-md transition-all duration-150 flex items-center gap-space-xs group shadow-sm" type="button">
+            <button onClick={() => handleQuickPill('Does Google Photos fail to understand the clues they provide?')} className="quick-pill rounded-full px-space-md py-1.5 bg-surface-container hover:bg-surface-container-high text-on-surface-variant hover:text-on-surface font-label-md text-label-md transition-all duration-150 flex items-center gap-space-xs group shadow-sm" type="button">
               <span className="material-symbols-outlined text-[14px] text-outline group-hover:text-primary transition-colors">report_problem</span>
               <span>Search Breakdowns</span>
             </button>

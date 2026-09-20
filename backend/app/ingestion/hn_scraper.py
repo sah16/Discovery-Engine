@@ -16,7 +16,10 @@ def fetch_hn_threads(limit: int = 50) -> List[Dict[str, Any]]:
         "google photos search",
         "apple photos search",
         "find old photos",
-        "photo management search"
+        "photo management search",
+        "finding ancestry photos",
+        "searching historical photos",
+        "old photo keywords"
     ]
     
     base_url = "https://hn.algolia.com/api/v1/search"

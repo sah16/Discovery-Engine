@@ -132,12 +132,13 @@ async def synthesize_insights(query: str, retrieved_context: List[dict], metrics
     
     CRITICAL INSTRUCTION 3 (NO INTERNAL IDENTIFIERS): You MUST NOT mention internal data identifiers like "Thread 24" or "Thread 9" in your titles or descriptions for retrieval_problems or opportunity_areas. The end user does not know what a "Thread" is. Synthesize the findings into general observations about user behavior. (You will only use the source_thread_id in the evidence list, not in the text descriptions).
     
-    CRITICAL INSTRUCTION 4 (OUT OF SCOPE QUERIES): If the user's query (e.g., "{query}") is completely unrelated to photo retrieval, product feedback, or software usage (for example, general knowledge questions, math problems, off-topic chat), you MUST return empty lists `[]` for all three JSON keys. Under no circumstances should you answer out-of-scope questions.
+    CRITICAL INSTRUCTION 4 (OUT OF SCOPE QUERIES): If the user's query (e.g., "{query}") is completely unrelated to photo retrieval, product feedback, or software usage (for example, general knowledge questions, math problems, off-topic chat), you MUST return `true` for the "is_out_of_scope" key and return empty lists `[]` for all other keys. Under no circumstances should you answer out-of-scope questions.
     
-    Generate a structured JSON output with THREE keys:
-    1. "retrieval_problems": A list of objects. Each object must have a "title" and "description". Limit to the top 3-4 problems. Ensure descriptions include relevant quantitative metrics.
-    2. "opportunity_areas": A list of objects. For EVERY retrieval problem, provide a corresponding opportunity area object with a "title" and "description". The description MUST propose specific, actionable product features, UI changes, or algorithmic improvements. DO NOT generate vague conceptual statements (e.g., "improve search").
-    3. "evidence": A list of objects, each containing a direct "quote" extracted EXACTLY from the text, and the "source_thread_id" (integer) it came from.
+    Generate a structured JSON output with FOUR keys:
+    1. "is_out_of_scope": A boolean indicating if the query is unrelated to the product (true) or valid (false).
+    2. "retrieval_problems": A list of objects. Each object must have a "title" and "description". Limit to the top 3-4 problems. Ensure descriptions include relevant quantitative metrics.
+    3. "opportunity_areas": A list of objects. For EVERY retrieval problem, provide a corresponding opportunity area object with a "title" and "description". The description MUST propose specific, actionable product features, UI changes, or algorithmic improvements. DO NOT generate vague conceptual statements (e.g., "improve search").
+    4. "evidence": A list of objects, each containing a direct "quote" extracted EXACTLY from the text, and the "source_thread_id" (integer) it came from.
     
     Feedback Threads:
     {context_str}

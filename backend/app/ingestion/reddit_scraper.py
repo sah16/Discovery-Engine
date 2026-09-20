@@ -22,8 +22,8 @@ def fetch_reddit_threads(limit: int = 50) -> List[Dict[str, Any]]:
     # We use automation-lab/reddit-scraper, a robust and free community scraper on Apify
     actor_id = "automation-lab/reddit-scraper"
     
-    subreddits = ["googlephotos", "ApplePhotos", "ios", "Android"]
-    keywords = ["find photo", "search picture", "can't find", "remember photo", "searching for a photo"]
+    subreddits = ["googlephotos", "ApplePhotos", "ios", "Android", "Genealogy", "AskReddit", "DataHoarder", "photography"]
+    keywords = ["find photo", "search picture", "can't find", "remember photo", "searching for a photo", "keywords old photos", "how to find old photos", "searching historical photos"]
     
     results = []
     

@@ -39,23 +39,28 @@ This document outlines the phase-wise implementation plan for the **AI-Powered D
     *   Develop the Retrieval-Augmented Generation (RAG) logic:
         *   Translate the inferred intent into a Vector DB query (embedding the user query with `all-MiniLM-L6-v2`).
         *   Perform a hybrid search (semantic similarity + metadata filtering) to fetch relevant feedback threads.
+    *   Implement strict guardrails against answering out-of-scope queries.
+    *   Optimize query latency via parallel execution and address OOM issues by lazily loading embedding models.
 
 ## Phase 5: Synthesis & Quantification Engine (Weeks 6-7)
 **Goal:** Transform retrieved raw feedback into structured, actionable insights.
 *   **Tasks:**
     *   Design the LLM prompt chain (using Groq) for analyzing the retrieved context.
     *   Implement logic to calculate proportional metrics from the structured metadata (e.g., Failure distribution, root cause percentages).
+    *   Inject quantitative telemetry metrics into the prompt to enforce data-grounded insights.
     *   Configure the LLM to output a structured JSON response containing:
         *   Synthesized qualitative insights.
         *   Categorized retrieval problems.
         *   Direct supporting quotes from users.
+    *   Sanitize LLM output to prevent schema validation errors and forbid mentions of internal thread IDs.
 
 ## Phase 6: Frontend Dashboard Development (Weeks 7-8)
 **Goal:** Build the user interface for internal product teams to query and view insights.
 *   **Tasks:**
     *   Develop the main Search UI for accepting natural language inquiries.
     *   Integrate React charting libraries (e.g., Recharts) to build Metrics Cards and Visualizations (Failure distributions, root causes).
-    *   Build the Insights Panel and Evidence Feed to display the AI-generated analysis and raw user quotes.
+    *   Build the Insights Panel and Evidence Feed in an optimized 2x2 grid layout to display the AI-generated analysis and raw user quotes.
+    *   Add explicit UI warnings for out-of-scope queries.
     *   Connect the frontend components to the FastAPI endpoints.
 
 ## Phase 7: Testing, Optimization, and Deployment (Week 9)

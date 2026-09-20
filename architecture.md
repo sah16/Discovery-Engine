@@ -55,29 +55,32 @@ The system is composed of an asynchronous data pipeline for ingesting and proces
         *   Retrieval Breakdown
         *   Comparative Inquiries
         *   Workarounds
-    3.  Translates the inferred intent into optimized search queries (dense vectors + metadata filters) for the database.
+    3.  **Scope Guardrails**: Actively identifies out-of-scope queries, short-circuits the retrieval pipeline, and triggers UI warnings to prevent hallucinated or irrelevant answers.
+    4.  Translates the inferred intent into optimized search queries (dense vectors + metadata filters) for the database.
 
 ### 3.4 Integration & Retrieval Layer (RAG)
 *   **Function**: Retrieves relevant contextual data based on the processed query.
 *   **Process**:
-    1.  Performs a semantic search on the Vector Database to find similar conversation clusters.
+    1.  Performs a semantic search on the Vector Database to find similar conversation clusters. (Embedding models are lazily loaded to prevent Out-Of-Memory errors during startup).
     2.  Applies metadata filters (e.g., date ranges, source types) if the user query was specific.
-    3.  Returns top-K relevant threads and their structured features.
+    3.  Optimizes query latency via parallel execution, processing multiple retrieval steps simultaneously.
+    4.  Returns top-K relevant threads and their structured features.
 
 ### 3.5 Discovery, Analysis & Quantification Engine
 *   **Function**: Synthesizes the retrieved data into human-readable insights and metrics.
 *   **Process**:
-    1.  Passes the retrieved context (documents + metadata) to a powerful LLM.
+    1.  Passes the retrieved context (documents + metadata) along with injected quantitative telemetry metrics to a powerful LLM to ensure data-grounded reasoning.
     2.  Instructs the LLM to aggregate the structured metadata (e.g., calculating the distribution of failure by content type).
     3.  Instructs the LLM to write qualitative insights, identify root causes, and isolate direct supporting quotes.
+    4.  Sanitizes output, preventing schema validation errors and stripping internal database identifiers (e.g., thread IDs) from user-facing insights.
 
 ### 3.6 Frontend Dashboard (Output Display)
 *   **Function**: User interface for querying and visualizing the results.
 *   **Features**:
-    *   **Search Bar**: For natural language queries.
+    *   **Search Bar**: For natural language queries, featuring explicit UI feedback when queries are out-of-scope.
     *   **Metrics Cards**: Displaying quantified statistics (e.g., 86% forgot exact dates).
     *   **Visualizations**: Pie charts and bar graphs for failure distributions and root causes.
-    *   **Insights Panel**: AI-generated textual analysis of the problem.
+    *   **Insights Panel**: AI-generated textual analysis of the problem, presented in an optimized 2x2 grid layout.
     *   **Evidence Feed**: A scrollable list of actual user quotes mapped to the identified insights.
 
 ---

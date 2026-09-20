@@ -20,8 +20,8 @@ def run_ingestion_pipeline():
     # 1. Scrape Reddit - DISABLED TO PROTECT APIFY CREDITS
     try:
         logger.info("Reddit scraping is currently disabled to save credits.")
+        # reddit_data = fetch_reddit_threads(limit=20) # Using a small limit to save credits
         reddit_data = []
-        # reddit_data = fetch_reddit_threads(limit=10) # Using a small limit to save credits
         raw_data.extend(reddit_data)
     except Exception as e:
         logger.error(f"Failed to fetch Reddit data: {e}")
