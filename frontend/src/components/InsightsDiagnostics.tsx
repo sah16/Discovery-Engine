@@ -1,7 +1,5 @@
 import { useLocation, Link } from 'react-router-dom';
-import { useEffect, useState, useRef } from 'react';
-import html2canvas from 'html2canvas';
-import jsPDF from 'jspdf';
+import { useEffect, useState } from 'react';
 import { analyzeQuery, type QueryResponse } from '../api';
 
 export function InsightsDiagnostics() {
@@ -11,66 +9,13 @@ export function InsightsDiagnostics() {
 
   const [data, setData] = useState<QueryResponse | null>(initialData || null);
   const [isLoading, setIsLoading] = useState(!initialData);
-  const [isGeneratingPdf, setIsGeneratingPdf] = useState(false);
-  const pdfRef = useRef<HTMLDivElement>(null);
 
   const problems = data?.retrieval_problems || data?.insights?.filter(i => !i.title.toLowerCase().includes('opportunity')) || [];
   const opportunities = data?.opportunity_areas || data?.insights?.filter(i => i.title.toLowerCase().includes('opportunity')) || [];
 
-  const generatePDF = async () => {
-    if (!pdfRef.current) return;
-    
-    setIsGeneratingPdf(true);
-    
-    // Temporarily stretch the main container to its full height
-    // while keeping the internal Voice of User scrollbar restricted
-    const originalHeight = pdfRef.current.style.height;
-    const originalOverflow = pdfRef.current.style.overflowY;
-    
-    pdfRef.current.style.height = 'auto';
-    pdfRef.current.style.overflowY = 'visible';
-    
-    try {
-      // html2canvas will capture the whole stretched layout but keep the quotes box at 800px
-      const canvas = await html2canvas(pdfRef.current, {
-        scale: 2, 
-        useCORS: true,
-        // Using a common dark theme background to prevent transparent areas turning black
-        backgroundColor: '#0f1115' 
-      });
-      
-      const imgData = canvas.toDataURL('image/png');
-      
-      const pdf = new jsPDF({
-        orientation: 'portrait',
-        unit: 'px',
-        format: 'a4'
-      });
-      
-      const pdfWidth = pdf.internal.pageSize.getWidth();
-      const pdfHeight = pdf.internal.pageSize.getHeight();
-      
-      const imgWidth = canvas.width;
-      const imgHeight = canvas.height;
-      
-      // Scale to fit precisely on one page
-      const ratio = Math.min(pdfWidth / imgWidth, pdfHeight / imgHeight);
-      
-      const imgX = (pdfWidth - imgWidth * ratio) / 2;
-      const imgY = 20;
-      
-      pdf.addImage(imgData, 'PNG', imgX, imgY, imgWidth * ratio, imgHeight * ratio);
-      pdf.save(`insights-report.pdf`);
-    } catch (error) {
-      console.error('Error generating PDF:', error);
-    } finally {
-      // Restore the scrollbar exactly as it was
-      pdfRef.current.style.height = originalHeight;
-      pdfRef.current.style.overflowY = originalOverflow;
-      setIsGeneratingPdf(false);
-    }
+  const handlePrint = () => {
+    window.print();
   };
-
   useEffect(() => {
     if (!initialData) {
       setIsLoading(true);
@@ -82,7 +27,7 @@ export function InsightsDiagnostics() {
   }, [query, initialData]);
 
   return (
-    <div ref={pdfRef} className="flex flex-col w-full h-full overflow-y-auto px-margin py-space-lg gap-space-lg relative">
+    <div className="flex flex-col w-full h-full overflow-y-auto print:h-auto print:overflow-visible px-margin py-space-lg gap-space-lg relative">
       {/* Atmospheric glows */}
       <div className="absolute top-10 left-1/4 w-96 h-96 bg-primary/10 rounded-full blur-3xl pointer-events-none -z-10"></div>
       <div className="absolute bottom-12 right-1/3 w-80 h-80 bg-secondary/10 rounded-full blur-3xl pointer-events-none -z-10"></div>
@@ -103,17 +48,17 @@ export function InsightsDiagnostics() {
             <span className="font-label-md text-label-md text-primary px-space-xs py-0.5 rounded bg-surface-container-high shadow-sm">
               “{query}”
             </span>
-            <Link className="inline-flex items-center gap-0.5 text-secondary hover:text-primary font-body-sm text-body-sm transition-colors ml-space-xs" to="/">
+            <Link className="inline-flex items-center gap-0.5 text-secondary hover:text-primary font-body-sm text-body-sm transition-colors ml-space-xs print:hidden" to="/">
               <span>Modify Query</span>
               <span className="material-symbols-outlined text-[14px]">north_east</span>
             </Link>
             <button 
-              onClick={generatePDF} 
-              disabled={isGeneratingPdf || isLoading}
-              className="inline-flex items-center gap-0.5 text-primary hover:text-primary/80 font-body-sm text-body-sm transition-colors ml-space-md disabled:opacity-50 cursor-pointer"
+              onClick={handlePrint} 
+              disabled={isLoading}
+              className="inline-flex items-center gap-0.5 text-primary hover:text-primary/80 font-body-sm text-body-sm transition-colors ml-space-md disabled:opacity-50 cursor-pointer print:hidden"
             >
               <span className="material-symbols-outlined text-[16px]">download</span>
-              <span>{isGeneratingPdf ? 'Generating PDF...' : 'Download PDF'}</span>
+              <span>Download PDF</span>
             </button>
           </div>
         </div>
@@ -263,7 +208,7 @@ export function InsightsDiagnostics() {
                 </div>
               </div>
 
-              <div className="flex flex-col gap-space-md overflow-y-auto pr-2 custom-scrollbar flex-1">
+              <div className="flex flex-col gap-space-md overflow-y-auto print:overflow-hidden pr-2 custom-scrollbar flex-1">
                 {data?.evidence?.length ? data.evidence.map((item, idx) => (
                   <div key={idx} className="bg-surface-container-lowest p-space-md rounded-xl shadow-sm border border-outline-variant hover:shadow-md transition-shadow relative">
                     <div className="absolute top-2 left-2 text-tertiary/20">
