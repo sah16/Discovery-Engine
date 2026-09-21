@@ -67,5 +67,5 @@ async def query_rag_engine(request: QueryRequest, db: Session = Depends(get_db))
     """
     Infers intent and retrieves relevant feedback threads using RAG.
     """
-    result = await perform_rag_query(request.query, db, limit=10)
+    result = await perform_rag_query(request.query, db, limit=5)
     return result
