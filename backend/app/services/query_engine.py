@@ -41,12 +41,18 @@ async def perform_rag_query(query: str, db: Session, limit: int = 10) -> Dict[st
         
         remembered = []
         if record.remembered_attributes:
-            try: remembered = json.loads(record.remembered_attributes)
+            try: 
+                parsed = json.loads(record.remembered_attributes)
+                if isinstance(parsed, list):
+                    remembered = parsed
             except: pass
             
         forgotten = []
         if record.forgotten_attributes:
-            try: forgotten = json.loads(record.forgotten_attributes)
+            try: 
+                parsed = json.loads(record.forgotten_attributes)
+                if isinstance(parsed, list):
+                    forgotten = parsed
             except: pass
             
         formatted_results.append({
