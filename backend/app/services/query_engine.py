@@ -80,6 +80,7 @@ async def perform_rag_query(query: str, db: Session, limit: int = 10) -> Dict[st
         "results": formatted_results,
         "metrics": metrics,
         "is_out_of_scope": synthesis.get("is_out_of_scope", False),
+        "executive_summary": synthesis.get("executive_summary", None),
         "retrieval_problems": synthesis.get("retrieval_problems", None),
         "opportunity_areas": synthesis.get("opportunity_areas", None),
         "insights": synthesis.get("insights", None),

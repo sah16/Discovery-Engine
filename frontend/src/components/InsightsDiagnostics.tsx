@@ -67,7 +67,19 @@ export function InsightsDiagnostics() {
           </Link>
         </div>
       ) : (
-      <div className="grid grid-cols-1 lg:grid-cols-2 gap-gutter mt-space-md items-start">
+      <>
+        {data?.executive_summary && (
+          <div className="w-full mt-space-md p-space-lg bg-surface-container-high rounded-xl shadow-md border-l-4 border-secondary flex flex-col gap-space-sm">
+            <h2 className="font-headline-md text-headline-md text-secondary font-medium flex items-center gap-2">
+              <span className="material-symbols-outlined text-[20px]">psychology</span>
+              Executive Summary
+            </h2>
+            <p className="font-body-lg text-body-lg text-on-surface leading-relaxed">
+              {data.executive_summary}
+            </p>
+          </div>
+        )}
+        <div className="grid grid-cols-1 lg:grid-cols-2 gap-gutter mt-space-md items-start">
         
         {/* Top Left: Retrieval Problems */}
         <div className="bg-surface-container p-space-lg rounded-xl shadow-xl border-l-4 border-error/70 flex flex-col gap-space-md h-full">
@@ -204,8 +216,8 @@ export function InsightsDiagnostics() {
             )}
           </div>
         </div>
-
       </div>
+      </>
       )}
     </div>
   );
