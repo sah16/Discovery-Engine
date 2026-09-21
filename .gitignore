@@ -65,7 +65,6 @@ backend/*.csv
 # Admin and local utility scripts
 backend/alter_db.py
 backend/check_db.py
-backend/download_model.py
 backend/fetch_past_comments.py
 backend/list_models.py
 backend/reset_db.py
