@@ -1,6 +1,6 @@
 import { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { analyzeQuery } from '../api';
+
 
 export function SearchConsole() {
   const [query, setQuery] = useState('');
