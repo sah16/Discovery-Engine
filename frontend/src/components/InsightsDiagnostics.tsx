@@ -110,6 +110,17 @@ export function InsightsDiagnostics() {
         </div>
       ) : (
         <>
+          {(!isLoading && !data?.executive_summary) && (
+            <div className="w-full mt-space-md p-space-lg bg-surface-container-high rounded-xl shadow-md border-l-4 border-secondary flex flex-col gap-space-sm break-inside-avoid opacity-70">
+              <h2 className="font-headline-md text-headline-md text-secondary font-medium flex items-center gap-2">
+                <span className="material-symbols-outlined text-[20px]">psychology</span>
+                Executive Summary
+              </h2>
+              <p className="font-body-lg text-body-lg text-on-surface leading-relaxed italic">
+                No relevant feedback data was found for this query in the current dataset.
+              </p>
+            </div>
+          )}
           {data?.executive_summary && (
             <div className="w-full mt-space-md p-space-lg bg-surface-container-high rounded-xl shadow-md border-l-4 border-secondary flex flex-col gap-space-sm break-inside-avoid">
               <h2 className="font-headline-md text-headline-md text-secondary font-medium flex items-center gap-2">
