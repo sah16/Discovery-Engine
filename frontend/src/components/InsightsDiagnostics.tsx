@@ -80,7 +80,7 @@ export function InsightsDiagnostics() {
       ) : (
         <>
           {data?.executive_summary && (
-            <div className="w-full mt-space-md p-space-lg bg-surface-container-high rounded-xl shadow-md border-l-4 border-secondary flex flex-col gap-space-sm">
+            <div className="w-full mt-space-md p-space-lg bg-surface-container-high rounded-xl shadow-md border-l-4 border-secondary flex flex-col gap-space-sm break-inside-avoid">
               <h2 className="font-headline-md text-headline-md text-secondary font-medium flex items-center gap-2">
                 <span className="material-symbols-outlined text-[20px]">psychology</span>
                 Executive Summary
@@ -101,7 +101,7 @@ export function InsightsDiagnostics() {
               <div className="flex flex-col gap-space-sm h-full">
                 {problems.length ? (
                   problems.map((insight, idx) => (
-                    <div key={`prob-${idx}`} className="bg-error/5 p-space-md rounded-lg border border-error/10 hover:border-error/30 transition-colors">
+                    <div key={`prob-${idx}`} className="bg-error/5 p-space-md rounded-lg border border-error/10 hover:border-error/30 transition-colors break-inside-avoid">
                       <h3 className="font-headline-sm text-headline-sm text-on-surface font-semibold mb-1">
                         {insight.title.replace(/retrieval problem:\s*/i, '').trim()}
                       </h3>
@@ -125,7 +125,7 @@ export function InsightsDiagnostics() {
               <div className="flex flex-col gap-space-sm h-full">
                 {opportunities.length ? (
                   opportunities.map((insight, idx) => (
-                    <div key={`opp-${idx}`} className="bg-primary/5 p-space-md rounded-lg border border-primary/10 hover:border-primary/30 transition-colors">
+                    <div key={`opp-${idx}`} className="bg-primary/5 p-space-md rounded-lg border border-primary/10 hover:border-primary/30 transition-colors break-inside-avoid">
                       <h3 className="font-headline-sm text-headline-sm text-on-surface font-semibold mb-1">
                         {insight.title.replace(/opportunity area:\s*/i, '').trim()}
                       </h3>
@@ -210,7 +210,7 @@ export function InsightsDiagnostics() {
 
               <div className="flex flex-col gap-space-md overflow-y-auto print:overflow-hidden pr-2 custom-scrollbar flex-1">
                 {data?.evidence?.length ? data.evidence.map((item, idx) => (
-                  <div key={idx} className="bg-surface-container-lowest p-space-md rounded-xl shadow-sm border border-outline-variant hover:shadow-md transition-shadow relative">
+                  <div key={idx} className="bg-surface-container-lowest p-space-md rounded-xl shadow-sm border border-outline-variant hover:shadow-md transition-shadow relative break-inside-avoid">
                     <div className="absolute top-2 left-2 text-tertiary/20">
                       <span className="material-symbols-outlined text-3xl">format_quote</span>
                     </div>

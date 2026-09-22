@@ -3,7 +3,7 @@ import { Outlet, Link } from 'react-router-dom';
 export function Layout() {
 
   return (
-    <div className="dark bg-background font-body-md text-body-md text-on-surface antialiased h-screen w-full overflow-hidden flex flex-col">
+    <div className="dark bg-background font-body-md text-body-md text-on-surface antialiased h-screen w-full overflow-hidden print:h-auto print:overflow-visible flex flex-col">
       <header className="shrink-0 z-50 bg-surface/80 backdrop-blur-xl border-b border-outline-variant/30 shadow-[0_4px_20px_rgba(0,0,0,0.4)]">
         <div className="h-16 w-full px-margin flex items-center justify-between gap-space-md">
           <div className="flex items-center gap-space-md shrink-0">
@@ -22,7 +22,7 @@ export function Layout() {
         </div>
       </header>
 
-      <main className="w-full bg-surface flex-grow flex flex-col overflow-hidden relative">
+      <main className="w-full bg-surface flex-grow flex flex-col overflow-hidden print:overflow-visible print:h-auto relative">
         <Outlet />
       </main>
 
