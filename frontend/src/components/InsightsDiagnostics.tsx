@@ -9,6 +9,7 @@ export function InsightsDiagnostics() {
 
   const [data, setData] = useState<QueryResponse | null>(initialData || null);
   const [isLoading, setIsLoading] = useState(!initialData);
+  const [error, setError] = useState<string | null>(null);
 
   const problems = data?.retrieval_problems || data?.insights?.filter(i => !i.title.toLowerCase().includes('opportunity')) || [];
   const opportunities = data?.opportunity_areas || data?.insights?.filter(i => i.title.toLowerCase().includes('opportunity')) || [];
@@ -19,10 +20,29 @@ export function InsightsDiagnostics() {
   useEffect(() => {
     if (!initialData) {
       setIsLoading(true);
-      analyzeQuery(query)
+      setError(null);
+      const controller = new AbortController();
+      const timeoutId = setTimeout(() => controller.abort(), 50000);
+
+      analyzeQuery(query, controller.signal)
         .then(setData)
-        .catch(console.error)
-        .finally(() => setIsLoading(false));
+        .catch(err => {
+          console.error(err);
+          if (err.name === 'AbortError') {
+            setError("The server took too long to respond. Please try again.");
+          } else {
+            setError("Oops! We couldn't analyze this query. Please try again.");
+          }
+        })
+        .finally(() => {
+          clearTimeout(timeoutId);
+          setIsLoading(false);
+        });
+        
+      return () => {
+        clearTimeout(timeoutId);
+        controller.abort();
+      };
     }
   }, [query, initialData]);
 
@@ -65,7 +85,18 @@ export function InsightsDiagnostics() {
       </div>
 
       {/* Main Layout Grid */}
-      {data?.is_out_of_scope ? (
+      {error ? (
+        <div className="w-full mt-space-md p-space-xl bg-error-container/20 rounded-2xl border border-error/30 flex flex-col items-center justify-center text-center gap-space-sm shadow-lg">
+          <span className="material-symbols-outlined text-[48px] text-error mb-space-xs">error</span>
+          <h2 className="font-headline-lg text-headline-lg text-error font-semibold">Query Failed</h2>
+          <p className="font-body-lg text-body-lg text-on-surface max-w-2xl">
+            {error}
+          </p>
+          <Link className="mt-space-md px-space-lg py-space-sm rounded-xl bg-surface-container-high hover:bg-surface-container-highest text-on-surface font-label-md text-label-md transition-colors border border-outline-variant" to="/">
+            Return to Search Console
+          </Link>
+        </div>
+      ) : data?.is_out_of_scope ? (
         <div className="w-full mt-space-md p-space-xl bg-error-container/20 rounded-2xl border border-error/30 flex flex-col items-center justify-center text-center gap-space-sm shadow-lg">
           <span className="material-symbols-outlined text-[48px] text-error mb-space-xs">gpp_maybe</span>
           <h2 className="font-headline-lg text-headline-lg text-error font-semibold">Out of Scope Query</h2>

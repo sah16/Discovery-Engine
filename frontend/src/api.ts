@@ -35,7 +35,7 @@ export interface QueryResponse {
   evidence: EvidenceQuote[];
 }
 
-export const analyzeQuery = async (query: string): Promise<QueryResponse> => {
+export const analyzeQuery = async (query: string, signal?: AbortSignal): Promise<QueryResponse> => {
   // Use relative path so it routes through Vite proxy locally or Render Rewrites in prod
   const response = await fetch('/api/query', {
     method: 'POST',
@@ -43,6 +43,7 @@ export const analyzeQuery = async (query: string): Promise<QueryResponse> => {
       'Content-Type': 'application/json',
     },
     body: JSON.stringify({ query }),
+    signal,
   });
 
   if (!response.ok) {

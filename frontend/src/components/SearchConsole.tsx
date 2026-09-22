@@ -4,21 +4,12 @@ import { analyzeQuery } from '../api';
 
 export function SearchConsole() {
   const [query, setQuery] = useState('');
-  const [isAnalyzing, setIsAnalyzing] = useState(false);
   const navigate = useNavigate();
 
-  const handleSearchWithQuery = async (searchQuery: string) => {
-    if (searchQuery.trim() && !isAnalyzing) {
-      setIsAnalyzing(true);
-      try {
-        const responseData = await analyzeQuery(searchQuery);
-        // Navigate to insights page with query and data in state
-        navigate('/insights', { state: { query: searchQuery, data: responseData } });
-      } catch (e) {
-        console.error(e);
-      } finally {
-        setIsAnalyzing(false);
-      }
+  const handleSearchWithQuery = (searchQuery: string) => {
+    if (searchQuery.trim()) {
+      // Navigate to insights page immediately with query in state
+      navigate('/insights', { state: { query: searchQuery } });
     }
   };
 
@@ -83,19 +74,10 @@ export function SearchConsole() {
                   className="w-full md:w-auto px-space-lg py-space-md rounded-xl bg-gradient-to-r from-primary-container via-secondary-container to-tertiary-container hover:brightness-110 active:scale-95 text-on-primary font-headline-sm text-headline-sm font-semibold flex items-center justify-center gap-space-sm shadow-lg shadow-primary-container/20 transition-all duration-200 disabled:opacity-70 disabled:cursor-not-allowed"
                   type="button"
                   onClick={handleSearch}
-                  disabled={isAnalyzing}
+                  disabled={!query.trim()}
                 >
-                  {isAnalyzing ? (
-                    <>
-                      <span className="material-symbols-outlined animate-spin text-[20px]">sync</span>
-                      <span>Embedding Vectors...</span>
-                    </>
-                  ) : (
-                    <>
-                      <span className="material-symbols-outlined text-[20px]">auto_awesome</span>
-                      <span>Analyze & Synthesize</span>
-                    </>
-                  )}
+                  <span className="material-symbols-outlined text-[20px]">auto_awesome</span>
+                  <span>Analyze & Synthesize</span>
                 </button>
               </div>
             </div>
